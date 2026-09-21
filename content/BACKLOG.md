@@ -1,33 +1,41 @@
-# Initial Long-Form Backlog
+# Long-Form Backlog
 
-These are working candidates, not yet all locked. Each must pass topic-demand and differentiation review before production.
+Status: **MK1 active queue**
 
-## Batch A — First six candidates
+## Completed
 
-1. **I Built a Fully Automated YouTube Channel With AI — Here's the Real Cost**
+1. **I Built an AI YouTube Video Factory for $0 — Here’s What Actually Worked**
    - Pillar: Build & Automate / Business & Economics
-   - Why it fits: NINFA can document its own real pipeline and actual cost.
-   - Must be real: no simulated revenue or fabricated automation.
+   - Status: complete / published.
 
-2. **I Built a 24/7 AI Research Agent — Here's What It Actually Gets Right**
-   - Pillar: Build & Automate / Experiment
-   - Angle: practical reliability, not just setup.
-
-3. **n8n vs AI Agents: What Should You Learn Now?**
+2. **I Replaced a Paid AI Video Editor With Free Tools — Here’s What Happened**
    - Pillar: Replace / Compare / Decide
-   - Angle: decision framework based on real tasks.
+   - Status: complete / uploaded.
 
-4. **I Gave an AI Agent 100 Real Tasks — Here's Where It Failed**
+## Next locked experiment
+
+3. **I Gave an AI Agent 100 Real Tasks — Here’s Where It Failed**
    - Pillar: Experiments & Stress Tests
-   - Angle: failure data and limits.
+   - Status: topic locked; experiment design required before result-based packaging.
+   - Must measure PASS / PARTIAL / FAIL, failure modes, human rescue, cost/time and category differences.
 
-5. **5 AI Automations Businesses Will Actually Pay For**
-   - Pillar: Business & Economics
-   - Angle: concrete commercial problems, not generic time savings.
+## Priority queue
 
-6. **I Built an AI Employee for Less Than $20**
+4. **n8n vs AI Agents: What Should You Learn Now?**
+   - Pillar: Replace / Compare / Decide
+   - Use real task classes, not abstract feature lists.
+
+5. **I Built an AI Employee for Less Than $20**
    - Pillar: Build & Automate / Business & Economics
-   - Angle: transparent build cost and real scope.
+   - Transparent cost and scope; no implied replacement of a real employee unless evidence supports it.
+
+6. **5 AI Automations Businesses Will Actually Pay For**
+   - Pillar: Business & Economics
+   - Concrete commercial problems; evidence-first.
+
+7. **I Built a 24/7 AI Research Agent — Here’s What It Actually Gets Right**
+   - Pillar: Build & Automate / Experiment
+   - Reliability over setup tutorial.
 
 ## Additional candidates
 
@@ -40,14 +48,19 @@ These are working candidates, not yet all locked. Each must pass topic-demand an
 
 ## Packaging rule
 
-Generate at least 10 title hypotheses and 3 thumbnail concepts for each selected long-form video. We may use aggressive curiosity, but the final video must fulfill the title/thumbnail promise.
+For selected long-form videos:
+- create multiple title hypotheses,
+- create materially different thumbnail concepts,
+- maximize curiosity without breaking the promise,
+- never freeze a measured result before running the experiment.
 
 ## Locking criteria
 
-A topic may enter production only if it has:
+A topic enters production only if it has:
 - clear viewer outcome,
-- evidence of demand or timely relevance,
-- differentiation from obvious competitor coverage,
+- demand/timeliness rationale,
+- differentiation,
 - demonstrable experiment/build potential,
 - monetization relevance without compromising trust,
-- production feasibility within current cost constraints.
+- production feasibility,
+- a truthful evidence plan.

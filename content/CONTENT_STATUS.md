@@ -1,76 +1,65 @@
 # Content Status
 
-Status date: 2026-09-20
+Status date: 2026-09-21
 
 ## Video 001 — COMPLETE / PUBLISHED
 **I Built an AI YouTube Video Factory for $0 — Here’s What Actually Worked**
 
-Purpose:
-- origin story,
-- prove the production stack,
-- show UAT failures and improvements,
-- establish “generate less, prove more.”
-
-Observed production:
-- ~5:29,
-- 1080p,
-- local Kokoro male narration,
-- captions,
-- evidence-driven graphics.
-
-YouTube:
-https://youtu.be/kWGgE9pFD_w
+Runtime: ~5:29.
+YouTube: https://youtu.be/kWGgE9pFD_w
 
 ## Video 002 — COMPLETE / UPLOADED
 **I Replaced a Paid AI Video Editor With Free Tools — Here’s What Happened**
 
-Purpose:
-- Pictory vs NINFA,
-- convenience vs control,
-- recurring-tool “earn your seat” doctrine.
-
-Observed production:
-- ~5:01,
-- 1080p,
-- local Kokoro male narration,
-- evidence-first comparison.
-
-Upload URL observed during setup:
-https://youtu.be/aujH-Lla_Kc
+Runtime: ~5:01.
+Observed upload URL: https://youtu.be/aujH-Lla_Kc
 
 Verify visibility in YouTube Studio when needed.
 
-## Video 003 — NEXT / EXPERIMENT NOT YET RUN
-**I Gave an AI Agent 100 Real Tasks — Here’s Where It Failed**
+## Video 003 — ACTIVE RESEARCH / PUBLIC-EVIDENCE PIVOT
+**600 Real Business Tasks Exposed AI Agents — Here’s Where They Break**
 
-Goal:
-- first external agent stress test,
-- move beyond meta-production,
-- produce measured reliability evidence.
+The original plan to spend API credits running a fresh 100-task benchmark has been retired as unnecessary duplication.
 
-Required before execution:
-- 100-task dataset,
-- category taxonomy,
-- reproducible instructions,
-- PASS / PARTIAL / FAIL rubric,
-- human-rescue definition,
-- hallucination/tool-error taxonomy,
-- timing/cost capture,
-- evidence retention.
+New approach:
+- use public benchmark evidence,
+- attribute every result to the organization/researchers who ran it,
+- analyze real task structures and failure data,
+- reconstruct visuals only when clearly labeled,
+- spend $0 on benchmark API replication.
 
-Possible categories:
-- coding,
-- research,
-- browser navigation,
-- file handling,
-- summarization,
-- planning,
-- extraction,
-- business workflows,
-- multi-step tool use.
+Primary evidence:
+**Zapier AutomationBench**
+- 600 public scored tasks,
+- six business domains,
+- 47 simulated SaaS tools,
+- deterministic final-state scoring.
 
-Packaging rule:
-Do not claim a specific failure, percentage or “task 17” moment until the run produces it.
+Observed public benchmark result:
+GPT-5.6 Sol — 45.83% pass rate at highest available reasoning effort.
+
+Separate harder held-out leaderboard:
+GPT-5.6 Sol (Max) — 28.77% on the current official private benchmark snapshot.
+
+These results come from different benchmark splits and must not be presented as the same run.
+
+Potential supporting evidence:
+- SWE-bench,
+- OSWorld,
+- GAIA.
+
+## Video 003 integrity rule
+
+Do not say:
+“I gave an AI agent 100 tasks”
+
+unless we actually run such an experiment ourselves.
+
+Allowed truthful formulations:
+- “I analyzed 600 public benchmark tasks/results”
+- “Zapier tested agents across 600 realistic business workflows”
+- “Public benchmark data shows…”
+- “I reconstructed this example from published benchmark data”
 
 ## Priority queue after Video 003
 
@@ -79,12 +68,3 @@ Do not claim a specific failure, percentage or “task 17” moment until the ru
 3. **5 AI Automations Businesses Will Actually Pay For**
 4. **I Built a 24/7 AI Research Agent — Here’s What It Actually Gets Right**
 5. **I Replaced 3 SaaS Tools With One AI Agent**
-6. **Make vs n8n vs AI Agents — Which One Actually Wins for Real Work?**
-
-## Channel sequencing rule
-
-Do not make every episode about NINFA.
-
-Video 001 earned the origin story.
-Video 002 tested production economics.
-From Video 003 onward, the public channel should increasingly focus on external AI/software experiments.

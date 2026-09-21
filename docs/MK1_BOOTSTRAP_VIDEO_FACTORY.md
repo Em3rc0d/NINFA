@@ -1,45 +1,56 @@
 # MK1 Bootstrap Video Factory
 
-## Decision
+## Status
 
-NINFA will bootstrap with a local/open-source production path before paying for Pictory or another recurring video assembly SaaS.
+**VALIDATED / SUPERSEDED BY PRODUCTION**
 
-Pictory remains an optional accelerator that must earn its seat after the channel has traction or revenue.
+This document began as the bootstrap plan. The core local/open-source production hypothesis has now been demonstrated.
 
-## Reuse map
+## Proven stack
 
-- `youtube-automation-agent`: long-form pipeline and human-review patterns.
-- `MoneyPrinterTurbo`: media/TTS/subtitles/rendering components.
-- `TubeAssistant`: publishing, scheduling, analytics and orchestration patterns.
-- Voicebox: local TTS service.
-- Playwright: real software/browser captures.
-- FFmpeg: final composition and finishing.
+- structured scene manifests,
+- local Kokoro TTS,
+- user-approved male narrator,
+- real screenshots/UI/evidence,
+- programmatic graphics,
+- FFmpeg composition,
+- SRT captions,
+- 1080p long-form output,
+- human QA.
 
-## First implementation slice
+## Historical reuse map
 
-Only build what UAT-001 requires:
+- `youtube-automation-agent`: long-form architecture reference.
+- `MoneyPrinterTurbo`: commodity media/rendering reference.
+- `TubeAssistant`: publishing/analytics reference.
+- Voicebox / Kokoro: local TTS.
+- Playwright: real browser/software capture.
+- FFmpeg: composition and finishing.
 
-1. scene manifest ingestion,
-2. local Voicebox TTS,
-3. media slots,
-4. FFmpeg timeline assembly,
-5. captions,
-6. 1080p export,
-7. measurement report.
+## UAT outcome
 
-No YouTube auto-publishing yet.
-No full autonomous topic miner yet.
-No cloud deployment.
-No paid generative-video dependency.
+The original local-vs-Pictory question is now answered more precisely:
+
+- Pictory: faster/easier first draft.
+- NINFA local stack: materially more control, evidence alignment and ownership.
+- Local stack: accepted as the primary production path.
+- Pictory: optional accelerator only if it later earns its seat.
 
 ## Upgrade rule
 
-A paid tool can enter the production stack only when it demonstrably:
+A paid tool may enter production only when it demonstrably:
 - improves output quality,
 - materially reduces human time,
-- or produces more value/revenue than its recurring cost.
+- or creates more value/revenue than its recurring cost.
 
-## Next gate
+## Next engineering priority
 
-UAT-001 local render vs Pictory preview:
-PASS / CONDITIONAL / REJECT.
+Do not rebuild the renderer for novelty.
+
+Focus on:
+- evidence capture,
+- experiment reproducibility,
+- retention-aware editing,
+- analytics ingestion,
+- derivative asset generation,
+- repeatable production around real external experiments.

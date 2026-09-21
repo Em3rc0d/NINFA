@@ -1,0 +1,102 @@
+{
+  "id": "UAT-001",
+  "title": "Can AI Run a YouTube Channel?",
+  "aspect_ratio": "16:9",
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "fps": 30,
+  "tts": {
+    "provider": "voicebox",
+    "engine": "kokoro",
+    "language": "en",
+    "personality": false
+  },
+  "scenes": [
+    {
+      "id": 1,
+      "narration": "Everyone says AI can automate a YouTube channel.",
+      "visual_type": "title+contextual",
+      "overlay": "CAN AI RUN A YOUTUBE CHANNEL?"
+    },
+    {
+      "id": 2,
+      "narration": "So instead of selling you the idea, I’m building one from zero and measuring what actually happens.",
+      "visual_type": "project_evidence",
+      "overlay": "STARTING FROM ZERO"
+    },
+    {
+      "id": 3,
+      "narration": "This is Project NINFA: a system designed to research topics, write scripts, capture real software, generate media, assemble videos, publish them, and learn from the results.",
+      "visual_type": "diagram",
+      "overlay": "PROJECT NINFA"
+    },
+    {
+      "id": 4,
+      "narration": "But there’s a problem.",
+      "visual_type": "title",
+      "overlay": "THE PROBLEM"
+    },
+    {
+      "id": 5,
+      "narration": "Fully generating an eight-minute video with modern video models can become expensive very quickly.",
+      "visual_type": "cost_graphic",
+      "overlay": "8 MIN OF GENERATED VIDEO = EXPENSIVE"
+    },
+    {
+      "id": 6,
+      "narration": "So NINFA takes a different approach.",
+      "visual_type": "title",
+      "overlay": "A DIFFERENT APPROACH"
+    },
+    {
+      "id": 7,
+      "narration": "Most of the video comes from evidence: real interfaces, browser recordings, code, screenshots, results, and diagrams.",
+      "visual_type": "montage",
+      "overlay": "REAL EVIDENCE"
+    },
+    {
+      "id": 8,
+      "narration": "Generative video is reserved for scenes where it actually adds something.",
+      "visual_type": "comparison",
+      "overlay": "GENERATE ONLY WHEN USEFUL"
+    },
+    {
+      "id": 9,
+      "narration": "For example, if I test an AI agent on one hundred tasks, you shouldn’t be watching a fake robot for ten minutes.",
+      "visual_type": "comparison",
+      "overlay": "100 TASKS"
+    },
+    {
+      "id": 10,
+      "narration": "You should see the agent, the failures, the logs, and the numbers.",
+      "visual_type": "evidence_montage",
+      "overlay": "AGENT · FAILURES · LOGS · NUMBERS"
+    },
+    {
+      "id": 11,
+      "narration": "That changes the economics completely.",
+      "visual_type": "title",
+      "overlay": "THE ECONOMIC SHIFT"
+    },
+    {
+      "id": 12,
+      "narration": "Instead of paying to generate every second, we only pay for the parts that genuinely need generation.",
+      "visual_type": "diagram",
+      "overlay": "GENERATE LESS. PROVE MORE."
+    },
+    {
+      "id": 13,
+      "narration": "And that is the experiment behind this channel:",
+      "visual_type": "brand_transition",
+      "overlay": "THE EXPERIMENT"
+    },
+    {
+      "id": 14,
+      "narration": "build AI systems, test them on real work, measure the outcome, and show you what actually works.",
+      "visual_type": "brand_endcard",
+      "overlay": "BUILD · TEST · MEASURE · PROVE"
+    }
+  ]
+}

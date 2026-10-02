@@ -1,0 +1,21 @@
+services:
+  chatterbox:
+    build:
+      context: .
+      args:
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cu124}
+    container_name: chatterbox-local
+    gpus: all
+    environment:
+      DEVICE: ${DEVICE:-auto}
+      HF_HOME: /cache/huggingface
+      TRANSFORMERS_CACHE: /cache/huggingface
+    ports:
+      - "${CHATTERBOX_PORT:-7860}:7860"
+    volumes:
+      - ./voices:/workspace/voices
+      - ./inputs:/workspace/inputs
+      - ./outputs:/workspace/outputs
+      - ./hf-cache:/cache/huggingface
+      - ./pkuseg-cache:/root/.pkuseg
+    restart: unless-stopped

@@ -4,6 +4,16 @@ Status: **VALIDATED / PRODUCTION-CANDIDATE**
 
 Last validated: 2026-10-02
 
+## Canonical implementation
+
+The reproducible implementation now lives in:
+
+`tools/chatterbox-local/`
+
+That directory contains the pinned Chatterbox runtime, CUDA-enabled Docker image, Docker Compose definition, WSL2 NVIDIA Container Toolkit bootstrap, start/stop scripts, Gradio application and cache policy.
+
+The implementation is the source of truth for executable setup. This document records the architectural and operational decisions.
+
 ## Purpose
 
 Provide Does It Automate with a reusable, local, zero-API-cost voice-cloning path for long-form narration.
@@ -12,12 +22,13 @@ This is a production component, not a requirement that every video use synthetic
 
 ## Validated stack
 
-- Chatterbox Multilingual TTS
-- local Docker runtime
+- Chatterbox Multilingual TTS, pinned PyPI release `chatterbox-tts==0.1.7`
+- Python 3.11
+- PyTorch 2.6.0 with CUDA 12.4 wheels
+- local Docker Engine under WSL2
+- NVIDIA Container Toolkit
 - FFmpeg reference normalization
 - Gradio local UI
-- PyTorch
-- NVIDIA CUDA acceleration when available
 - no paid TTS API required
 
 ## Voice-cloning behavior validated
@@ -26,19 +37,20 @@ A Spanish reference clip can be used to generate English narration while preserv
 
 Important operating rule:
 
-**The output language selector describes the language of the narration text, not the language of the reference clip.**
+**The language selector describes the language of the narration text, not the language of the reference clip.**
 
 Example:
 
 - reference: Spanish voice sample
 - narration text: English
-- output language: English
+- narration text language: English
 
-Using English output settings with Spanish text produces English-style pronunciation of the Spanish text and is therefore not the intended workflow.
+Using English language settings with Spanish narration text produces English-style pronunciation of that Spanish text and is not the intended workflow.
 
 ## Reference guidance
 
 Preferred reference:
+
 - 10–30 seconds
 - one speaker only
 - clean voice
@@ -50,16 +62,16 @@ Preferred reference:
 
 Existing OBS recordings are acceptable when the voice is clean.
 
-Keep references outside GitHub if they contain personal voice media. GitHub stores only configuration, documentation and reproducible workflow details.
+Keep personal reference voice media outside GitHub. The repository stores only code, configuration, documentation and reproducible workflow details.
 
 ## Cross-language settings
 
-Validated working pattern for Spanish-reference → English-output:
+Validated starting point for Spanish-reference → English-output:
 
-- language: English
-- CFG weight: 0.0 for cross-language generation
-- exaggeration: around 0.5 as an initial baseline
-- temperature: around 0.8 as an initial baseline
+- narration text language: English
+- CFG weight: 0.0
+- exaggeration: around 0.5
+- temperature: around 0.8
 
 These are starting values, not immutable production constants.
 
@@ -68,50 +80,52 @@ These are starting values, not immutable production constants.
 ### CPU-only baseline
 
 Observed test:
+
 - output audio: ~83 s
 - generation time: 837 s
 - RTF: ~10.08
 
-Interpretation:
-- functional,
-- fully local,
-- suitable for offline rendering,
-- slow for repeated iteration.
-
 ### GPU baseline
 
 Validated hardware:
+
 - NVIDIA GeForce GTX 1650
 - 4 GB VRAM
-- CUDA available inside Chatterbox container
+- CUDA visible inside the Chatterbox container
 
 Observed test:
+
 - output audio: 79.9 s
 - generation time: 279.9 s
 - RTF: ~3.50
-- speedup vs CPU baseline: ~2.99x
+- observed end-to-end speedup vs CPU baseline: about 3x
 
 Interpretation:
-- GTX 1650 4 GB is sufficient for the current Chatterbox workload,
+
+- GTX 1650 4 GB is sufficient for the current workload,
 - GPU inference is materially better for production,
-- still best treated as offline render rather than realtime TTS.
+- the system is still best treated as offline rendering rather than realtime TTS.
 
-## Docker / WSL notes
+## WSL2 / Docker CUDA bootstrap
 
-Environment validated:
+Validated environment:
+
 - Windows
 - WSL2 Ubuntu 22.04
 - Docker Engine running inside WSL
 - NVIDIA GPU visible to WSL
 - NVIDIA Container Toolkit configured for Docker
 
-The key Docker validation is:
+Canonical bootstrap:
 
 ```bash
-docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi
+cd tools/chatterbox-local
+chmod +x scripts/*.sh
+./scripts/setup-wsl-cuda.sh
+./scripts/start.sh
 ```
 
-The Chatterbox container must use CUDA-enabled PyTorch and expose the GPU.
+The setup script intentionally does not install a Linux NVIDIA display driver. WSL consumes the Windows NVIDIA driver.
 
 ## Current production flow
 
@@ -133,38 +147,42 @@ scene manifest / renderer
 final video
 ```
 
-## Known maintenance items
-
-1. Persist all model/support caches so container rebuilds do not redownload secondary assets.
-2. Show chunk-level progress in the UI.
-3. Save each completed chunk before concatenation.
-4. Resume from completed chunks after failure.
-5. Surface generation metrics in the UI:
-   - audio duration,
-   - generation duration,
-   - RTF,
-   - device,
-   - chunk count.
-6. Rename UI label from `Output language` to `Narration text language`.
-7. Preserve a CPU fallback configuration.
-8. Keep model/runtime versions pinned and documented.
-
 ## Model/version caution
 
 Do not assume the PyPI release and GitHub master expose identical APIs.
 
-A validated mismatch occurred where the GitHub branch supported a `t3_model="v3"` argument while the installed PyPI package did not.
+A validated mismatch occurred where an upstream revision showed a `t3_model="v3"` argument while the installed PyPI package did not accept it.
+
+The pinned implementation therefore uses:
+
+```python
+ChatterboxMultilingualTTS.from_pretrained(device=DEVICE)
+```
 
 Production rule:
+
 - pin the exact package version,
 - verify its runtime API,
 - do not copy parameters from a different upstream revision without testing.
+
+## Maintenance backlog
+
+The executable package already persists Hugging Face and pkuseg caches and exposes benchmark metrics.
+
+Next improvements:
+
+1. chunk-level progress,
+2. save completed chunks before concatenation,
+3. resume from completed chunks after failure,
+4. optional per-section manifest generation,
+5. repeatable audio QA/mastering pass.
 
 ## Cost conclusion
 
 Marginal TTS API cost: **S/0**
 
 Actual costs:
+
 - local electricity,
 - existing hardware,
 - storage,
@@ -173,6 +191,7 @@ Actual costs:
 ## Production acceptance
 
 The voice clone is considered usable for Does It Automate when:
+
 - speaker identity is convincing,
 - pronunciation is correct,
 - artifacts are acceptable,

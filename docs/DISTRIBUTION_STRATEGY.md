@@ -23,6 +23,67 @@ For each strong long-form episode, create:
 6. **Card** — only when contextually relevant.
 7. **Pinned comment** — ask an easy, specific question and tease the next experiment.
 
+## Shorts packaging system
+
+Current evidence-backed formula:
+
+> **EXPECTATION → ACTION → CONTRADICTION → PROOF → LESSON**
+
+Use one observable idea per Short.
+
+Preferred structure:
+- open on the contradiction, not setup,
+- show or state the measurable proof immediately,
+- expose a real consequence,
+- end on one engineering meaning,
+- remove intros and repeated explanation.
+
+Packaging should favor concrete outcomes over generic AI commentary.
+
+Prefer:
+- numbers,
+- failed checks,
+- tool-call counts,
+- retries,
+- wrong-state evidence,
+- real API/system consequences,
+- before/after state.
+
+Do not assume short duration alone causes performance. Current successful examples often land around **10–16 seconds**, but compression is a means, not the objective.
+
+### Publishing during the learning phase
+
+Prefer spaced releases that let each Short generate interpretable analytics.
+
+Do not dump many near-duplicate Shorts at once.
+
+Do not claim cadence itself caused prior performance differences; the current sample is too small for that conclusion.
+
+### Repetition guardrail
+
+A long-form experiment may produce several Shorts only when each one contains a materially different:
+- failure class,
+- contradiction,
+- result,
+- metric,
+- engineering lesson.
+
+Do not keep recycling the same incident with cosmetic wording changes.
+
+### Short analytics gate
+
+For each meaningful Short, capture at minimum:
+- views,
+- shown in feed,
+- viewed vs swiped away,
+- average view duration,
+- average percentage viewed,
+- retention curve when available,
+- subscribers gained,
+- relationship to any linked long-form video.
+
+Use views as a distribution signal, not as the sole measure of content quality.
+
 ## Packaging
 
 For important long-form uploads:

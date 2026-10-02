@@ -1,0 +1,87 @@
+{
+  "id": "short-2026-10-02-cross-app-fragmentation",
+  "status": "production_ready",
+  "publish_date": "2026-10-02",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16",
+    "target_runtime_seconds": 12.5
+  },
+  "title": "6 Apps. 29 Tool Calls. The Workflow Still Broke.",
+  "voiceover": "Six apps. Twenty-nine tool calls. The agent still passed only two of eight checks. CRM and Calendar worked. Calendly, Zoom, DocuSign, and the proposal didn't. A working tool call is not a working workflow.",
+  "scenes": [
+    {
+      "start": 0,
+      "end": 1.4,
+      "text": [
+        "6 APPS",
+        "one sales workflow"
+      ],
+      "visual": "Six-node connected workflow begins assembling on graphite background."
+    },
+    {
+      "start": 1.4,
+      "end": 3,
+      "text": [
+        "29 TOOL CALLS",
+        "published AutomationBench run"
+      ],
+      "visual": "Counter punches in; workflow nodes remain visible."
+    },
+    {
+      "start": 3,
+      "end": 7.8,
+      "text": [
+        "Salesforce ✓",
+        "Calendar ✓",
+        "Calendly ✕",
+        "Zoom ✕",
+        "DocuSign ✕",
+        "Proposal ✕"
+      ],
+      "visual": "Statuses reveal left-to-right; first two succeed, remaining four fail."
+    },
+    {
+      "start": 7.8,
+      "end": 9.8,
+      "text": [
+        "2 / 8",
+        "CHECKS PASSED"
+      ],
+      "visual": "Hard cut to dominant numeric proof."
+    },
+    {
+      "start": 9.8,
+      "end": 12.5,
+      "text": [
+        "A TOOL CALL ≠ A WORKFLOW"
+      ],
+      "visual": "Final lesson with restrained canonical Does It Automate? mark."
+    }
+  ],
+  "brand": {
+    "background": "graphite/near-black",
+    "type": "off-white",
+    "accent": "approved electric blue/cyan",
+    "failure_state": "red allowed sparingly",
+    "canonical_logo_only": true,
+    "prohibited": [
+      "deprecated circuit-D logo",
+      "purple AI gradients",
+      "robot-head imagery",
+      "decorative stock B-roll"
+    ]
+  },
+  "evidence": {
+    "benchmark": "AutomationBench public archived run",
+    "task": "sales.full_sales_cycle_orchestrator",
+    "model_run": "Qwen3.6-27B base",
+    "score": 0.25,
+    "assertions_passed": 2,
+    "assertions_total": 8,
+    "tool_calls": 29,
+    "steps": 11,
+    "source_file": "content/video-003/FAILURE_REPLAYS.md"
+  }
+}

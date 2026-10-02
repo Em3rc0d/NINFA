@@ -51,9 +51,17 @@ Market signals → topic scoring → research → experiment/build → script �
 
 ## Current production architecture
 
-Script → structured scene manifest → local Kokoro narration → evidence/graphics → FFmpeg renderer → SRT → QA → YouTube.
+Script → structured scene manifest → local Chatterbox voice clone or Kokoro fallback → evidence/graphics → FFmpeg renderer → SRT → QA → YouTube.
+
+Narration policy:
+- Chatterbox is the preferred local voice-clone path when the approved creator voice is required.
+- Kokoro remains a fallback local TTS path.
+- Human narration is always allowed when it produces the stronger editorial result.
+- Voice references and generated heavy audio are not stored in GitHub by default.
 
 Real interfaces and evidence take priority over generic generated footage.
+
+See: `docs/VOICE_CLONE_CHATTERBOX.md`.
 
 ## Engineering principle
 

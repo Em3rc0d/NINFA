@@ -9,7 +9,7 @@
     "target_runtime_seconds": 12.5
   },
   "title": "6 Apps. 29 Tool Calls. The Workflow Still Broke.",
-  "voiceover": "Six apps. Twenty-nine tool calls. The agent still passed only two of eight checks. CRM and Calendar worked. Calendly, Zoom, DocuSign, and the proposal didn't. A working tool call is not a working workflow.",
+  "voiceover": "Six apps. Twenty-nine tool calls. Only two of eight checks passed. CRM and Calendar worked. Calendly, Zoom, DocuSign, and the proposal failed. A tool call is not a workflow.",
   "scenes": [
     {
       "start": 0,
@@ -83,5 +83,13 @@
     "tool_calls": 29,
     "steps": 11,
     "source_file": "content/video-003/FAILURE_REPLAYS.md"
+  },
+  "audio": {
+    "engine": "Kokoro v1.0 ONNX",
+    "voice": "am_michael",
+    "language": "en-us",
+    "synthesis_speed": 1.1,
+    "post_tempo_fit": 1.025,
+    "final_runtime_seconds": 12.7
   }
 }

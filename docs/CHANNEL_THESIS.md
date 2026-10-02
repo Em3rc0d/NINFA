@@ -89,6 +89,104 @@ Never fabricate:
 - costs,
 - benchmark outcomes.
 
+## Shorts editorial formula — evidence-backed v1
+
+Status: **ACTIVE LEARNING RULE — 2026-10-01**
+
+The first 12 published Shorts produced an early but meaningful packaging signal. Near-A/B pairs using the same underlying failure performed materially better when the second version was shorter, contradiction-first and evidence-led.
+
+Observed examples:
+- 49 tool calls / 0 checks: 14 views → 195 views.
+- knew what to do / could not stop: 6 → 132.
+- WhatsApp recipient-loss failure: 6 → 72.
+- false “done” / wrong system state: 26 → 41.
+
+This is not yet a universal causal law. Treat it as the current winning hypothesis and keep validating it with retention, viewed-vs-swiped-away and repeat experiments.
+
+### Core formula
+
+> **EXPECTATION → ACTION → CONTRADICTION → PROOF → LESSON**
+
+Operational shorthand:
+
+> **Anomaly + immediate contradiction + quantifiable evidence + real consequence + minimal explanation.**
+
+A strong Does It Automate? Short should make the viewer understand, as fast as possible:
+1. what the system was supposed to do,
+2. what it actually did,
+3. why the two conflict,
+4. what observable evidence proves the failure or success,
+5. the smallest useful engineering lesson.
+
+### Preferred hook shape
+
+Use concrete, testable contradictions instead of generic commentary.
+
+Prefer:
+- “The AI made 49 tool calls — and passed zero checks.”
+- “The AI knew what to do — it just couldn’t stop.”
+- “The AI said ‘done.’ The system disagreed.”
+
+Avoid as the primary format:
+- generic AI opinions,
+- broad motivational claims,
+- abstract “AI is unreliable” statements,
+- listicle framing when a real experiment can carry the story.
+
+Rule:
+
+> **Do not explain an idea when the experiment can demonstrate it.**
+
+### Evidence rule
+
+Whenever possible, expose:
+- counts,
+- assertions,
+- retries,
+- tool calls,
+- records changed,
+- cost,
+- latency,
+- state before/after,
+- accepted/rejected operations,
+- other directly verifiable outcomes.
+
+The number is not decoration. It is proof.
+
+### Duration rule
+
+Current successful Shorts cluster around compact delivery, often roughly **10–16 seconds**, but duration is not the target by itself.
+
+Do not optimize for 11 seconds.
+
+Optimize for:
+- one idea,
+- one contradiction,
+- immediate evidence,
+- no intro,
+- no redundant explanation.
+
+### Two complementary Short pillars
+
+1. **AI Failure Lab**
+   - observable agent/system failures,
+   - strange contradictions,
+   - boundary/control/state/tool-use failures,
+   - measured consequences.
+
+2. **Automation Reality**
+   - boring systems that actually work,
+   - deterministic engineering where AI is unnecessary,
+   - business automation tied to a real operational outcome.
+
+Failure content can drive discovery. Automation Reality prevents the channel from becoming a compilation of broken agents and reinforces the core question: **does it automate?**
+
+### Novelty rule
+
+Do not repeatedly repackage the same incident unless a new version tests a materially different editorial hypothesis.
+
+Prefer a new failure class, new system behavior or new engineering lesson over another wording of the same event.
+
 ## Automation thesis
 
 Target: **90–95% automated production operations**.

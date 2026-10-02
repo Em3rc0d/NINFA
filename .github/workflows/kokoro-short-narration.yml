@@ -42,10 +42,10 @@ jobs:
 
           text = (
               "Six apps. Twenty-nine tool calls. "
-              "The agent still passed only two of eight checks. "
+              "Only two of eight checks passed. "
               "CRM and Calendar worked. "
-              "Calendly, Zoom, DocuSign, and the proposal didn't. "
-              "A working tool call is not a working workflow."
+              "Calendly, Zoom, DocuSign, and the proposal failed. "
+              "A tool call is not a workflow."
           )
 
           kokoro = Kokoro("kokoro-v1.0.onnx", "voices-v1.0.bin")

@@ -26,9 +26,9 @@ Do not publish both as separate near-duplicate Shorts.
 
 ## Voiceover
 
-> Six apps. Twenty-nine tool calls. The agent still passed only two of eight checks. CRM and Calendar worked. Calendly, Zoom, DocuSign, and the proposal didn't. A working tool call is not a working workflow.
+> Six apps. Twenty-nine tool calls. Only two of eight checks passed. CRM and Calendar worked. Calendly, Zoom, DocuSign, and the proposal failed. A tool call is not a workflow.
 
-Target runtime: **~11–14 s** depending on narration pacing.
+Target runtime: **12.7 s**. Final narration: **Kokoro v1.0 ONNX / am_michael / en-US / speed 1.10**, with ~2.5% post tempo fit to the locked visual runtime.
 
 ## Visual beat sheet
 

@@ -13,6 +13,8 @@ const cases = [
   ["reject other channel", m=>{m.channel="ContentSeller"}, false],
   ["reject paid API use", m=>{m.budget.paid_api_usd=1}, false],
   ["reject Actions for media render", m=>{m.budget.github_actions_for_media=true}, false],
+  ["reject unexpected root key", m=>{m.unsafe_posting_token="not-authorized"}, false],
+  ["reject unexpected nested key", m=>{m.distribution.publish_url="not-authorized"}, false],
   ["reject public raw voice reference", m=>{m.narration.reference_storage="PUBLIC_GITHUB"}, false],
   ["reject missing owner consent", m=>{m.narration.owner_permission=false}, false],
   ["reject unsupported TTS voice engine", m=>{m.narration.source="PIPER"}, false],

@@ -7,7 +7,7 @@ This directory holds **versioned, reviewable channel-specific policies**, not ru
 - [Creative/editorial and release contract](DOES_IT_AUTOMATE_SHORTS_MOTION_V1.md)
 - [JSON Schema — input structure](shorts-motion-v1.schema.json)
 - [PV-POC-006 non-sensitive example](fixtures/pv-poc-006.reference.json)
-- [Local validator](../../tools/contracts/validate_short_contract.mjs) and [17 offline unit scenarios](../../tools/contracts/test_short_contract.mjs)
+- [Local validator](../../tools/contracts/validate_short_contract.mjs) and [19 offline unit scenarios](../../tools/contracts/test_short_contract.mjs)
 
 Run locally from the NINFA repository root (no CI, paid APIs, social app or personal voice required):
 

@@ -1,16 +1,10 @@
 name: PV-POC-003 Neural Spanish Voice Test
 
+# Historical proof only. No automatic runs on push or PR.
+# Do not use GitHub Actions as a TTS production backend.
+# Manual invocation is intentionally isolated to preserve CI and artifact budgets.
 on:
-  push:
-    branches: ["experiment/pv-poc-003-piper-voice"]
-    paths:
-      - ".github/workflows/pv-poc-003-neural-voice.yml"
-      - "experiments/pv-poc-003/render_neural.py"
-  pull_request:
-    branches: [main]
-    paths:
-      - ".github/workflows/pv-poc-003-neural-voice.yml"
-      - "experiments/pv-poc-003/render_neural.py"
+  workflow_dispatch:
 
 permissions:
   contents: read

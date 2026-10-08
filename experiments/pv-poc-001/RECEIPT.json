@@ -1,0 +1,12 @@
+{
+  "schema":"video-poc-evidence-summary/v1",
+  "id":"PV-POC-001",
+  "status":"PASS_OUTPUT_ONLY",
+  "executed_in":"temporary isolated assistant work container, not user's WSL2",
+  "configuration":{"width":1080,"height":1920,"fps":30,"frames":300,"seconds":10,"scenes":3,"audio":false,"encoder":"H.264/libx264"},
+  "runs":{"first_elapsed_s":19.68,"second_elapsed_s":25.24,"first_peak_rss_mib":131.7,"second_peak_rss_mib":null},
+  "result":{"sha256":"44aa178c3aac0baf76dacec93ade73c740d11d0cc8ab28e8d4018ac09d5fca98","bytes":771848,"byte_identical_repeats":true,"codec":"h264","resolution":"1080x1920","fps":"30/1","nb_read_frames":300,"duration_seconds":10},
+  "source":{"render_py_sha256":"c36f1a7363d87fadc230915f2a5ecfa20138c017b0c1c25a21155c3c57139637","self_test_py_sha256":"b1e3b37669f5160a53494412824f603645a2d93d70f8fb2dafc0a1753d3e8451","manifest_sha256":"1b572e4ab3b640728251aedbd414674bc95c7de80c3bdd0d5551179b04ff2023"},
+  "checks":{"negative_manifest_cases_passed":6,"negative_safe_text_case_passed":true,"sampled_motion_frame_variance_passed":true,"all_text_checked_by_bounding_boxes":true,"ffprobe_passed":true,"audio_streams":0},
+  "limits":{"os_level_no_egress_proven":false,"untrusted_agent_code_executed":false,"host_no_secrets_access_proven":false,"tiktok_safe_zone_certified":false,"human_editorial_qa_passed":false,"source_archive_in_git":false,"published":false,"scheduled":false}
+}

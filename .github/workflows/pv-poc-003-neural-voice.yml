@@ -1,0 +1,58 @@
+name: PV-POC-003 Neural Spanish Voice Test
+
+on:
+  push:
+    branches: ["experiment/pv-poc-003-piper-voice"]
+    paths:
+      - ".github/workflows/pv-poc-003-neural-voice.yml"
+      - "experiments/pv-poc-003/render_neural.py"
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/pv-poc-003-neural-voice.yml"
+      - "experiments/pv-poc-003/render_neural.py"
+
+permissions:
+  contents: read
+
+jobs:
+  synthesize-and-render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout locked experiment branch
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install CPU-only Piper TTS and quality dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-lato
+          python -m pip install --disable-pip-version-check "piper-tts==1.3.0" "numpy>=1.26,<2" "soundfile>=0.12,<1"
+      - name: Download voice with pinned SHA256
+        working-directory: experiments/pv-poc-003
+        run: |
+          curl --fail --location --retry 3 --retry-delay 2 \
+            --output model.onnx \
+            https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_MX/claude/high/es_MX-claude-high.onnx
+          echo "3ef40a71ea63852cd8ab7e6fa7d2ecdcfa67a0b47c9c48e3f10e02ee02083ea0  model.onnx" | sha256sum --check
+          curl --fail --location --retry 3 --retry-delay 2 \
+            --output model.onnx.json \
+            https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_MX/claude/high/es_MX-claude-high.onnx.json
+      - name: Generate Spanish neural speech plus MP4 and probe
+        run: |
+          python experiments/pv-poc-003/render_neural.py
+      - name: Archive review materials (7 days, not publicly posted)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pv-poc-003-neural-voice-review
+          path: |
+            experiments/pv-poc-003/output/*.wav
+            experiments/pv-poc-003/output/*.mp4
+            experiments/pv-poc-003/output/*.srt
+            experiments/pv-poc-003/output/receipt.json
+          if-no-files-found: warn
+          retention-days: 7

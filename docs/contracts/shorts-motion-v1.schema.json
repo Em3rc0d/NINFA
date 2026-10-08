@@ -1,0 +1,395 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Em3rc0d/NINFA/blob/main/docs/contracts/shorts-motion-v1.schema.json",
+  "title": "Does It Automate? Shorts Motion Contract v1",
+  "description": "A policy input contract, not production asset certification or publishing authority. Offline semantic validator enforces cross-field gates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "channel",
+    "artifact_id",
+    "content",
+    "visual",
+    "narration",
+    "format",
+    "captions",
+    "budget",
+    "qa",
+    "distribution"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "channel": {
+      "const": "DoesItAutomate"
+    },
+    "artifact_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 120
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "language",
+        "headline",
+        "evidence_refs",
+        "mock_disclosure"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "ILLUSTRATIVE_POC",
+            "EVIDENCE_BACKED",
+            "MIXED_LABELED"
+          ]
+        },
+        "language": {
+          "const": "en"
+        },
+        "headline": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "mock_disclosure": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "visual": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "style_profile",
+        "direction_accepted",
+        "logo_state",
+        "beats"
+      ],
+      "properties": {
+        "style_profile": {
+          "const": "DIA_DARK_TECH_V1"
+        },
+        "direction_accepted": {
+          "type": "boolean"
+        },
+        "logo_state": {
+          "enum": [
+            "NOT_EMBEDDED",
+            "CANONICAL_OWNER_ASSET_VERIFIED",
+            "UNVERIFIED"
+          ]
+        },
+        "beats": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "start_frame",
+              "end_frame",
+              "from_state",
+              "to_state",
+              "purpose"
+            ],
+            "properties": {
+              "start_frame": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end_frame": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "from_state": {
+                "type": "string",
+                "minLength": 1
+              },
+              "to_state": {
+                "type": "string",
+                "minLength": 1
+              },
+              "purpose": {
+                "type": "string",
+                "minLength": 5
+              }
+            }
+          }
+        }
+      }
+    },
+    "narration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "language",
+        "reference_storage",
+        "owner_permission",
+        "audio_embedded"
+      ],
+      "properties": {
+        "source": {
+          "enum": [
+            "OWNER_HUMAN",
+            "LOCAL_CHATTERBOX",
+            "LOCAL_KOKORO",
+            "NONE"
+          ]
+        },
+        "language": {
+          "const": "en"
+        },
+        "reference_storage": {
+          "const": "PRIVATE_LOCAL"
+        },
+        "owner_permission": {
+          "type": "boolean"
+        },
+        "audio_embedded": {
+          "type": "boolean"
+        }
+      }
+    },
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height",
+        "fps",
+        "duration_frames",
+        "video_codec",
+        "audio_codec"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 720
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 720
+        },
+        "fps": {
+          "type": "integer",
+          "minimum": 24,
+          "maximum": 60
+        },
+        "duration_frames": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "video_codec": {
+          "const": "h264"
+        },
+        "audio_codec": {
+          "enum": [
+            "aac",
+            "none"
+          ]
+        }
+      }
+    },
+    "captions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "language",
+        "safe_zone_profile",
+        "margins_px",
+        "intervals"
+      ],
+      "properties": {
+        "language": {
+          "const": "en"
+        },
+        "safe_zone_profile": {
+          "enum": [
+            "POC_UNVERIFIED",
+            "MEASURED_FOR_DESTINATION"
+          ]
+        },
+        "margins_px": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "top",
+            "bottom",
+            "left",
+            "right"
+          ],
+          "properties": {
+            "top": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "bottom": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "left": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "right": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "intervals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "start_frame",
+              "end_frame",
+              "text"
+            ],
+            "properties": {
+              "start_frame": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end_frame": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paid_api_usd",
+        "github_actions_for_media"
+      ],
+      "properties": {
+        "paid_api_usd": {
+          "const": 0
+        },
+        "github_actions_for_media": {
+          "const": false
+        }
+      }
+    },
+    "qa": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "technical",
+        "human_editorial",
+        "brand",
+        "platform_safe_area",
+        "rights",
+        "audio_captions"
+      ],
+      "properties": {
+        "technical": {
+          "enum": [
+            "PASS",
+            "PENDING",
+            "FAIL"
+          ]
+        },
+        "human_editorial": {
+          "enum": [
+            "PASS",
+            "PENDING",
+            "FAIL"
+          ]
+        },
+        "brand": {
+          "enum": [
+            "PASS",
+            "PENDING",
+            "FAIL"
+          ]
+        },
+        "platform_safe_area": {
+          "enum": [
+            "PASS",
+            "PENDING",
+            "FAIL"
+          ]
+        },
+        "rights": {
+          "enum": [
+            "PASS",
+            "PENDING",
+            "FAIL"
+          ]
+        },
+        "audio_captions": {
+          "enum": [
+            "PASS",
+            "PENDING",
+            "FAIL"
+          ]
+        }
+      }
+    },
+    "distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_state",
+        "human_release_approval_ref",
+        "publish_authority",
+        "provider_receipt"
+      ],
+      "properties": {
+        "approval_state": {
+          "enum": [
+            "BLOCKED",
+            "READY_FOR_HUMAN_REVIEW",
+            "APPROVED_FOR_EXPORT"
+          ]
+        },
+        "human_release_approval_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "publish_authority": {
+          "const": "NONE"
+        },
+        "provider_receipt": {
+          "type": "null"
+        }
+      }
+    },
+    "output_sha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

@@ -27,7 +27,7 @@ This is a **design-direction contract** for NINFA’s English-language Shorts. I
 - **Disallowed for this zero-paid-API operating profile:** paid TTS/video APIs, Piper/eSpeak as auto-approved production voices, periodic GitHub Actions voice rendering and mandatory cloud inference.
 - Chatterbox is a locally documented production candidate ([voice cloning guide](../VOICE_CLONE_CHATTERBOX.md)), not permission to ingest personal references into third-party services. Kokoro remains a local alternative.
 - Preserve owner-controlled voice recordings **outside public GitHub and source PRs**, with explicit consent for any clone, and do not redistribute narrator reference clips.
-- Audio mastering can remove noise, normalize level and trim silence; pitch, tempo and accent should not be modified without listening/approval.
+- **Owner-approved default after 2026-10-09 listening UAT:** use human voice **without added compressor, EQ, loudness normalization or gain maximization**. Necessary trimming, timing and AAC codec conversion are allowed; pitch/tempo/accent must not be changed. Any corrective processing (including denoise or normalization) requires a documented need, matched-loudness before/after listening and owner approval. See the [natural-voice mix UAT receipt](decisions/NATURAL_VOICE_MIX_UAT_2026-10-09.md). Peak below 0 dBFS is not proof the sound is pleasing or free of microphone distortion.
 - No background music is required. Only add sound effects or licensed music where they contribute information and are permitted; \`$0 API\` is **not** a claim of zero electricity, editing time, storage or hardware cost.
 
 ## 3. Content and evidence rules

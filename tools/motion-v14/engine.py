@@ -67,6 +67,15 @@ def validate(m):
     else:
         require(evidence['source'] is None and evidence['measurements'] is None,'POC must not pretend evidence')
         require('DEMO' in evidence['disclosure'].upper(),'visible demo disclosure needed')
+    # At authoring time reject content that cannot fit the declared mobile-safe layout.
+    widths = ((m['title'], 38, True, 450), (m['eyebrow'],17,False,420),
+              (m['message'],20,False,420), (evidence['disclosure'],13,False,420))
+    for text,size,bold,maximum in widths:
+        require(font(size,bold).getlength(text) <= maximum, 'text exceeds safe typography width')
+    if m['family']=='circuit_breaker':
+        require(all(font(16,True).getlength(x)<100 for x in lab), 'breaker label too wide')
+    if m['family']=='source_lineage':
+        require(all(font(25,False).getlength(x)<285 for x in lab), 'lineage label too wide')
     return m
 
 def font(s=30,bold=True): return ImageFont.truetype(FONTS['bold' if bold else 'regular'],s)

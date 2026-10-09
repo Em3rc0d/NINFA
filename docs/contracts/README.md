@@ -13,6 +13,7 @@ This directory holds **versioned, reviewable channel-specific policies**, not ru
 - [Motion v1.4 Scene Engine ADR](decisions/MOTION_V1_4_SCENE_ENGINE_ADR.md) and [local proof receipt](decisions/MOTION_V1_4_LOCAL_PROOF_2026-10-08.md) — three separate visual families, 20 local unit tests, silent review-only outputs, no automated publishing.
 - [Motion v1.4 → v1.3 narrated integration proof](decisions/MOTION_V14_V13_NARRATION_INTEGRATION_2026-10-08.md) — fourth narrowly scoped demo composition, one-command local pipeline using privately held English voice, 26 local tests; publication still blocked.
 - [Motion v1.5 evidence-first Webhook Replay](decisions/MOTION_V1_5_DUPLICATE_WEBHOOK_LOCAL_PROOF_2026-10-09.md) — new deterministic SQLite source experiment, English 24s motion, 25 regression checks, voice and publication still pending.
+- [2026-10-09 The Duplicate Webhook voiced release QA](decisions/MOTION_V15_PUBLICATION_GATE_REVIEW_2026-10-09.md) — original AAC unchanged, 21s review master, 8 phrase-based subtitle cues, risk noted for bottom YouTube UI; owner mobile/editor/publish checks remain open.
 - [2026-10-09 natural-voice mix UAT](decisions/NATURAL_VOICE_MIX_UAT_2026-10-09.md) — owner accepted the original-source voice without extra compression/EQ/loudness normalization as the default audio treatment; publication remains separately blocked.
 
 Run locally from the NINFA repository root (no CI, paid APIs, social app or personal voice required):

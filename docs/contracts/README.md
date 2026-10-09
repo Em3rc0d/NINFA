@@ -9,6 +9,7 @@ This directory holds **versioned, reviewable channel-specific policies**, not ru
 - [PV-POC-006 non-sensitive example](fixtures/pv-poc-006.reference.json)
 - [Local validator](../../tools/contracts/validate_short_contract.mjs) and [19 offline unit scenarios](../../tools/contracts/test_short_contract.mjs)
 - [2026-10-08 Motion v1.2 voiced batch acceptance receipt](decisions/MOTION_V1_2_OWNER_UAT_2026-10-08.md) — owner accepted three reviewed shorts as audiovisual baseline; publication and general template certification remain separately gated.
+- [2026-10-08 Motion v1.3 local finishing proof](decisions/MOTION_V1_3_LOCAL_FINISHING_2026-10-08.md) — preflight, offline FFmpeg finishing, SHA-keyed cache and review-only QA; no full visual engine or release authority.
 
 Run locally from the NINFA repository root (no CI, paid APIs, social app or personal voice required):
 

@@ -1,0 +1,48 @@
+{
+  "schema": "local-replay-v1",
+  "experimental_mode": "LOCAL_SYNTHETIC_SEQUENTIAL",
+  "description": "Two deliveries of the same synthetic event in separate SQLite connections",
+  "inputs": {
+    "event_key": "evt_local_001",
+    "sequence": [
+      "evt_local_001",
+      "evt_local_001"
+    ]
+  },
+  "naive": {
+    "mode": "naive",
+    "attempts": 2,
+    "new_actions": 2,
+    "inserted": [
+      true,
+      true
+    ],
+    "stored_event_keys": [
+      "evt_local_001",
+      "evt_local_001"
+    ]
+  },
+  "guarded": {
+    "mode": "guarded",
+    "attempts": 2,
+    "new_actions": 1,
+    "inserted": [
+      true,
+      false
+    ],
+    "stored_event_keys": [
+      "evt_local_001"
+    ]
+  },
+  "limitations": [
+    "no external webhook provider",
+    "no real money or business action",
+    "no concurrent delivery",
+    "no network / API use",
+    "no production reliability claim"
+  ],
+  "api_spend_usd": 0,
+  "github_actions_media": false,
+  "published": false,
+  "sha256_content": "8dc48cde916fc45617a8d0022dccddca98c2886ef38e5e48971edf22c3e516b7"
+}

@@ -1,0 +1,13 @@
+*.wav
+*.m4a
+*.mp3
+*.mp4
+*.mov
+*.sqlite
+*.sqlite3
+*.receipt.json
+receipt.json
+__pycache__/
+output/
+review/
+cache/

@@ -1,6 +1,7 @@
 import copy
 import importlib.util
 import json
+import tempfile
 import pathlib
 import unittest
 
@@ -19,9 +20,6 @@ class ContractTests(unittest.TestCase):
 
     def test_approved_manifest(self):
         self.assertEqual(MOD.check_input(copy.deepcopy(BASE))['id'], 'dia01-review-v13')
-
-    def test_ass_rounding(self):
-        self.assertEqual(MOD.ass_stamp(30), '0:00:01.00')
 
     def test_reject_other_language(self):
         self.changed(lambda x: x.update(language='es'))
@@ -51,13 +49,38 @@ class ContractTests(unittest.TestCase):
         self.changed(lambda x: x['captions'][1].update(start_frame=20))
 
     def test_reject_caption_injection(self):
-        self.changed(lambda x: x['captions'][1].update(text=r'{\pos(20,30)}HACK'))
+        self.changed(lambda x: x['captions'][1].update(text=r'{\\pos(20,30)}HACK'))
 
     def test_reject_bad_framerate(self):
         self.changed(lambda x: x.update(fps=29))
 
     def test_reject_oversized_duration(self):
         self.changed(lambda x: x.update(duration_frames=1801))
+
+    def test_manifest_hash_changes_with_subtitles(self):
+        a = copy.deepcopy(BASE)
+        b = copy.deepcopy(BASE)
+        b['captions'][0]['text'] += ' different'
+        self.assertNotEqual(MOD.manifest_digest(a), MOD.manifest_digest(b))
+
+    def test_cache_requires_exact_source_hashes(self):
+        with tempfile.TemporaryDirectory() as dirname:
+            out = pathlib.Path(dirname)
+            video = out / (BASE['id'] + '.mp4')
+            video.write_bytes(b'synthetic bytes for cache unit test')
+            plan = {'visual_sha256': 'a', 'voice_sha256': 'b',
+                    'manifest_sha256': MOD.manifest_digest(BASE), 'frames': BASE['duration_frames']}
+            receipt = {**plan, 'status': 'TECHNICAL_PASS_REVIEW_ONLY', 'release_state': 'BLOCKED',
+                       'output_sha256': MOD.digest(video)}
+            (out / 'receipt.json').write_text(json.dumps(receipt))
+            self.assertTrue(MOD.cache_hit(out, BASE['id'], plan)['cache_hit'])
+            self.assertIsNone(MOD.cache_hit(out, BASE['id'], {**plan, 'voice_sha256': 'changed'}))
+            self.assertIsNone(MOD.cache_hit(out, BASE['id'], {**plan, 'manifest_sha256': 'changed'}))
+            video.write_bytes(b'tampered file')
+            self.assertIsNone(MOD.cache_hit(out, BASE['id'], plan))
+
+    def test_ass_rounding(self):
+        self.assertEqual(MOD.ass_stamp(30), '0:00:01.00')
 
 if __name__ == '__main__':
     unittest.main()

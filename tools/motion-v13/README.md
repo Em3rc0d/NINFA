@@ -72,6 +72,10 @@ The CLI **does not synthesize voice**, invoke Chatterbox or Kokoro, collect raw 
 
 Observed on Validation Gate with the same source media: **4.80 seconds** fresh, **1.15 seconds** cached on this particular container. This is a measured single-case skip, not a general end-to-end speedup claim.
 
+## Owner-approved voice treatment (2026-10-09)
+
+Default to the owner-controlled voice recording **without added dynamic-range compression, loudnorm or EQ**. This v1.3 finisher currently sends the voice track to the AAC encoder **without explicit audio filters**, consistent with the owner's preferred A/B mix. Lossy AAC output is not bit-identical to input; listen to the exported MP4 at matched playback volume before approving. Add corrective audio processing only on observed need and after before/after owner listening approval. See [Natural Voice Mix UAT](../../docs/contracts/decisions/NATURAL_VOICE_MIX_UAT_2026-10-09.md). Technical peak checks alone cannot determine acoustic naturalness.
+
 ## Privacy, limitations and next gates
 
 - **Do not commit** private `voice_master.wav`, `*.m4a`, finished videos, or `receipt.json` (receipt contains a hash of private voice). Local output directories should preferably be **outside** the checkout.

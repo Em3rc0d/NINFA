@@ -1,0 +1,33 @@
+{
+  "schema": "ninfa-scene-v1.4.0",
+  "brand": "DoesItAutomate",
+  "language": "en",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "frames": 708
+  },
+  "policy": {
+    "paid_api_usd": 0,
+    "github_actions": false,
+    "publish_authority": "NONE",
+    "allow_raw_voice": false
+  },
+  "id": "parallel-voice-integration",
+  "mode": "ILLUSTRATIVE_POC",
+  "family": "parallel_jobs",
+  "title": "3 JOBS. TWO WAYS.",
+  "eyebrow": "LOCAL SIMULATED TASKS / LAB",
+  "message": "Sequential vs. concurrent waits",
+  "labels": [
+    "SEQUENTIAL",
+    "PARALLEL",
+    "INDEPENDENT"
+  ],
+  "evidence": {
+    "source": null,
+    "measurements": null,
+    "disclosure": "DEMO / SIMULATED SLEEP TASKS"
+  }
+}

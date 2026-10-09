@@ -30,11 +30,22 @@ class Contract(unittest.TestCase):
  def test_html_injection(self):self.check_bad(lambda x:x.update(message='<script>alert(1)</script>'))
  def test_too_wide_title(self):self.check_bad(lambda x:x.update(title='W'*34))
  def test_too_wide_breaker_node(self):self.check_bad(lambda x:x.update(labels=['LONG REQUEST NAME', 'SERVICE','FALLBACK']),demo)
+ def test_parallel_duration_and_demo_gate(self):
+  parallel=json.loads((P/'parallel-voice-demo.json').read_text()); engine.validate(parallel)
+  shorter=copy.deepcopy(parallel);shorter['format']['frames']=180
+  with self.assertRaises(ValueError): engine.validate(shorter)
+  misleading=copy.deepcopy(parallel);misleading['mode']='EVIDENCE_BACKED'
+  with self.assertRaises(ValueError): engine.validate(misleading)
+ def test_parallel_beats_change_over_time(self):
+  m=json.loads((P/'parallel-voice-demo.json').read_text())
+  indices=[0,70,165,270,400,520,650,707]
+  frames=[engine.create_frame(m,i).resize((108,192)).tobytes() for i in indices]
+  self.assertEqual(len(set(frames)),len(frames))
  def test_frame_samples_vary(self):
   m=base;pixels=[engine.create_frame(m,i).resize((96,170)).tobytes() for i in [0,60,120,179]]
   self.assertEqual(len(set(pixels)),4)
  def test_module_outputs_are_distinct(self):
   s=[engine.create_frame(json.loads(p.read_text()),90).resize((96,170)).tobytes() for p in sorted(P.glob('*.json'))]
-  self.assertEqual(len(set(s)),3)
+  self.assertEqual(len(set(s)),len(s))
 
 if __name__=='__main__':unittest.main()

@@ -30,8 +30,8 @@ FONTS = {
     'medium':'/usr/share/fonts/truetype/lato/Lato-Semibold.ttf'
 }
 ALLOWED = {'schema','id','brand','language','format','policy','mode','family','title','eyebrow','message','labels','evidence'}
-FAMILIES = {'cache_race','circuit_breaker','source_lineage'}
-FRAME_MAX = 360
+FAMILIES = {'cache_race','circuit_breaker','source_lineage','parallel_jobs'}
+FRAME_MAX = 900
 
 def require(test, msg):
     if not test: raise ValueError(msg)
@@ -53,6 +53,10 @@ def validate(m):
     p=m['policy'];require(type(p) is dict and set(p)=={'paid_api_usd','github_actions','publish_authority','allow_raw_voice'} and type(p['paid_api_usd']) is int and p['paid_api_usd']==0 and p['github_actions'] is False and p['publish_authority']=='NONE' and p['allow_raw_voice'] is False,'budget/voice/publish gate')
     require(m['mode'] in ('ILLUSTRATIVE_POC','EVIDENCE_BACKED'), 'mode')
     require(m['family'] in FAMILIES, 'unsupported visual family')
+    if m['family']=='parallel_jobs':
+        require(fmt['frames']==708 and m['mode']=='ILLUSTRATIVE_POC', 'parallel integration demo requires 708 frames and DEMO mode')
+    else:
+        require(fmt['frames']<=360, 'other visual families capped at 360 frames')
     require(type(m['title']) is str and 4<=len(m['title'])<=35 and '\n' not in m['title'], 'title length')
     require(type(m['eyebrow']) is str and 2<=len(m['eyebrow'])<=36 and '\n' not in m['eyebrow'], 'eyebrow length')
     require(type(m['message']) is str and 4<=len(m['message'])<=75 and '\n' not in m['message'], 'message length')
@@ -76,6 +80,8 @@ def validate(m):
         require(all(font(16,True).getlength(x)<100 for x in lab), 'breaker label too wide')
     if m['family']=='source_lineage':
         require(all(font(25,False).getlength(x)<285 for x in lab), 'lineage label too wide')
+    if m['family']=='parallel_jobs':
+        require(all(font(18,True).getlength(x)<150 for x in lab), 'parallel labels too wide')
     return m
 
 def font(s=30,bold=True): return ImageFont.truetype(FONTS['bold' if bold else 'regular'],s)
@@ -160,11 +166,80 @@ def lineage(d,m,t):
     rr(d,(78,682,462,714),10,(31,52,66))
     label(d,(95,689),'NO UNVERIFIED CLAIMS',YELLOW,17)
 
-FAMILY={'cache_race':cache,'circuit_breaker':breaker,'source_lineage':lineage}
+def stage_window(secs,a,b):
+    return ramp(secs,a,b)
+
+def parallel_jobs(d,m,t):
+    # Dedicated continuous interface aligned to real owner's English narration,
+    # reused for ENGINE INTEGRATION testing, not a claim of new independent benchmark.
+    sec=t*708/30
+    rr(d,(46,263,494,679),18,(17,29,46),(45,77,99),2)
+    label(d,(67,279),'3 SIMULATED INDEPENDENT WAITS',SUB,16)
+    # Live elapsed-time ribbon, not an external service timer.
+    phase='QUEUE' if sec<2 else ('SEQUENTIAL' if sec<7.5 else ('PARALLEL' if sec<12.6 else ('RESULT' if sec<16.7 else ('NO AI MODEL' if sec<19.3 else 'CONDITION'))))
+    rr(d,(67,312,473,348),10,(25,45,65))
+    centered(d,(270,317),phase,19,ACCENT)
+    # Two persistent comparator bays. The stage changes, but the screen stays put.
+    labels=['JOB A','JOB B','JOB C']
+    for i,name in enumerate(labels):
+        y=385+i*63
+        color=[ACCENT,BLUE,GREEN][i]
+        label(d,(74,y),name,SUB,17)
+        rr(d,(154,y-1,460,y+21),9,(31,47,64))
+        # During 2.0–7.3, execute jobs in sequence. During 7.4–12.3, concurrently.
+        if sec<2.0: prog=0
+        elif sec<7.5:
+            starts=[2.0,3.88,5.53];ends=[3.88,5.53,7.5]
+            prog=ramp(sec,starts[i],ends[i])
+        elif sec<12.5:
+            prog=ramp(sec,7.6,11.75-(i*.06))
+        else: prog=1.0
+        ww=max(0,300*prog)
+        if ww>=10:rr(d,(154,y-1,154+ww,y+21),9,color)
+        if prog>=.99:
+            d.ellipse((464,y,479,y+15),fill=GREEN)
+            centered(d,(471,y-1),'✓',15,BG)
+        elif prog>.01:
+            pulse=3+2*math.sin((sec*5+i))**2
+            d.ellipse((154+ww-pulse,y+6-pulse/2,154+ww+pulse,y+6+pulse/2),fill=INK)
+    rr(d,(67,598,473,648),11,(20,46,60))
+    # Change only this metric row, to avoid slide-style hard cuts.
+    if sec<7.5:
+        left,right='SEQUENTIAL','0.34 s'
+    elif sec<12.5:
+        left,right='PARALLEL','0.14 s'
+    elif sec<16.7:
+        left,right='LOCAL SPEEDUP','~2.4x'
+    elif sec<19.3:
+        left,right='MODEL CALLS','NONE'
+    else:
+        left,right='ONLY WORKS IF','INDEPENDENT'
+    label(d,(83,614),left,SUB,16)
+    f=font(21);wide=d.textbbox((0,0),right,font=f)[2];d.text((450-wide,611),right,font=f,fill=YELLOW)
+    # Soft active scanning line, not an arbitrary looping attention grab.
+    sy=367+int(202*((sec%5)/5))
+    d.line((70,sy,469,sy),fill=(29,62,77),width=1)
+
+def base_parallel(m,t):
+    im=Image.new('RGB',(W,H),BG);d=ImageDraw.Draw(im)
+    for x in range(0,W,45):d.line((x,0,x,H),fill=(15,26,39),width=1)
+    for y in range(0,H,45):d.line((0,y,W,y),fill=(15,26,39),width=1)
+    rr(d,(28,113,512,814),18,(12,23,37),(40,62,84),2)
+    label(d,(56,126),m['eyebrow'],ACCENT,17)
+    centered(d,(270,152),m['title'],34)
+    # Subtitle zone is deliberately reserved between header and comparator UI.
+    label(d,(62,705),m['message'],SUB,18)
+    label(d,(62,751),m['evidence']['disclosure'],YELLOW,13)
+    d.line((59,789,481,789),fill=(36,55,77),width=4)
+    d.line((59,789,59+422*t,789),fill=ACCENT,width=4)
+    return im,d
+
+
+FAMILY={'cache_race':cache,'circuit_breaker':breaker,'source_lineage':lineage,'parallel_jobs':parallel_jobs}
 
 def create_frame(m,i):
     t=(i+.5)/m['format']['frames']
-    im,d=base(m,t)
+    im,d=(base_parallel(m,t) if m['family']=='parallel_jobs' else base(m,t))
     FAMILY[m['family']](d,m,t)
     return im
 

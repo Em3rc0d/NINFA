@@ -11,6 +11,7 @@ This directory holds **versioned, reviewable channel-specific policies**, not ru
 - [2026-10-08 Motion v1.2 voiced batch acceptance receipt](decisions/MOTION_V1_2_OWNER_UAT_2026-10-08.md) — owner accepted three reviewed shorts as audiovisual baseline; publication and general template certification remain separately gated.
 - [2026-10-08 Motion v1.3 local finishing proof](decisions/MOTION_V1_3_LOCAL_FINISHING_2026-10-08.md) — preflight, offline FFmpeg finishing, SHA-keyed cache and review-only QA; no full visual engine or release authority.
 - [Motion v1.4 Scene Engine ADR](decisions/MOTION_V1_4_SCENE_ENGINE_ADR.md) and [local proof receipt](decisions/MOTION_V1_4_LOCAL_PROOF_2026-10-08.md) — three separate visual families, 20 local unit tests, silent review-only outputs, no automated publishing.
+- [Motion v1.4 → v1.3 narrated integration proof](decisions/MOTION_V14_V13_NARRATION_INTEGRATION_2026-10-08.md) — fourth narrowly scoped demo composition, one-command local pipeline using privately held English voice, 26 local tests; publication still blocked.
 
 Run locally from the NINFA repository root (no CI, paid APIs, social app or personal voice required):
 

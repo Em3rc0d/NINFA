@@ -8,6 +8,7 @@ This directory holds **versioned, reviewable channel-specific policies**, not ru
 - [JSON Schema — input structure](shorts-motion-v1.schema.json)
 - [PV-POC-006 non-sensitive example](fixtures/pv-poc-006.reference.json)
 - [Local validator](../../tools/contracts/validate_short_contract.mjs) and [19 offline unit scenarios](../../tools/contracts/test_short_contract.mjs)
+- [2026-10-08 Motion v1.2 voiced batch acceptance receipt](decisions/MOTION_V1_2_OWNER_UAT_2026-10-08.md) — owner accepted three reviewed shorts as audiovisual baseline; publication and general template certification remain separately gated.
 
 Run locally from the NINFA repository root (no CI, paid APIs, social app or personal voice required):
 
@@ -22,4 +23,4 @@ For a production candidate, use a new fixture tied to a verified source and huma
 
 **Authority hierarchy:** frozen [Does It Automate? Brand v1](../BRAND_IDENTITY.md) > [Channel Thesis](../CHANNEL_THESIS.md) > this motion style contract > individual scene templates. A prodAgentic/global policy is not authorized by this directory.
 
-**Current status:** owner accepted PV-POC-006 **creative direction**. The prototype MP4, reused renderer, third-party platform-safe zones, and publication remain independently uncertified. Changes are kept on an isolated PR until merge authorization.
+**Current status:** motion v1.0.0 creative policy is on `main`; the owner also accepted the voiced Motion v1.2 review batch as an audiovisual reference. Neither the original concept POC nor this batch constitutes publication authority, platform-safe-zone certification, or a generalized renderer/template certificate.

@@ -1,0 +1,57 @@
+{
+  "schema": "motion-v1.3-finish",
+  "id": "parallel-v14-v13-review",
+  "channel": "DoesItAutomate",
+  "language": "en",
+  "mode": "ILLUSTRATIVE_POC",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "duration_frames": 708,
+  "narration_source": "OWNER_HUMAN",
+  "captions": [
+    {
+      "start_frame": 5,
+      "end_frame": 53,
+      "text": "Same three independent jobs."
+    },
+    {
+      "start_frame": 61,
+      "end_frame": 132,
+      "text": "Sequential execution took"
+    },
+    {
+      "start_frame": 133,
+      "end_frame": 215,
+      "text": "zero point three four seconds."
+    },
+    {
+      "start_frame": 229,
+      "end_frame": 296,
+      "text": "Parallel execution took"
+    },
+    {
+      "start_frame": 296,
+      "end_frame": 369,
+      "text": "zero point one four."
+    },
+    {
+      "start_frame": 389,
+      "end_frame": 493,
+      "text": "About 2.4 times faster\nin this local test."
+    },
+    {
+      "start_frame": 505,
+      "end_frame": 559,
+      "text": "No AI model required."
+    },
+    {
+      "start_frame": 581,
+      "end_frame": 688,
+      "text": "But parallel only helps\nwhen tasks are independent."
+    }
+  ],
+  "paid_api_usd": 0,
+  "github_actions_for_media": false,
+  "publish_authority": "NONE"
+}

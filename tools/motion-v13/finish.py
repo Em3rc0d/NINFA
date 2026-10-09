@@ -61,7 +61,7 @@ def check_input(data: dict) -> dict:
         raise ValueError('Frame count out of range')
     if data['narration_source'] not in ('OWNER_HUMAN', 'LOCAL_CHATTERBOX', 'LOCAL_KOKORO'):
         raise ValueError('Narration origin not approved')
-    if data['paid_api_usd'] != 0 or data['github_actions_for_media'] is not False or data['publish_authority'] != 'NONE':
+    if type(data['paid_api_usd']) is not int or data['paid_api_usd'] != 0 or data['github_actions_for_media'] is not False or data['publish_authority'] != 'NONE':
         raise ValueError('API/CI/publishing not authorized')
     if not isinstance(data['id'], str) or re.fullmatch(r'[a-z0-9-]{3,64}', data['id']) is None:
         raise ValueError('Unsafe ID')
@@ -115,7 +115,30 @@ def assert_visual(p: dict, frames: int) -> None:
         raise ValueError('Visual source mismatch: expected 1080x1920/30fps/exact frames')
 
 
-def assemble(manifest: dict, visual: Path, voice: Path, out: Path, *, dry_run: bool = False) -> dict:
+def manifest_digest(manifest: dict) -> str:
+    canonical = json.dumps(manifest, sort_keys=True, ensure_ascii=False, separators=(',', ':'))
+    return hashlib.sha256(canonical.encode('utf-8')).hexdigest()
+
+
+def cache_hit(out: Path, name: str, plan: dict) -> dict | None:
+    receipt = out / 'receipt.json'
+    video = out / (name + '.mp4')
+    if not receipt.is_file() or not video.is_file():
+        return None
+    try:
+        previous = json.loads(receipt.read_text(encoding='utf-8'))
+        keys = ('visual_sha256', 'voice_sha256', 'manifest_sha256', 'frames')
+        if (previous.get('status') == 'TECHNICAL_PASS_REVIEW_ONLY'
+                and previous.get('release_state') == 'BLOCKED'
+                and all(previous.get(key) == plan.get(key) for key in keys)
+                and previous.get('output_sha256') == digest(video)):
+            return {**previous, 'status': 'CACHED_TECHNICAL_PASS_REVIEW_ONLY', 'cache_hit': True}
+    except (OSError, ValueError, TypeError):
+        return None
+    return None
+
+
+def assemble(manifest: dict, visual: Path, voice: Path, out: Path, *, dry_run: bool = False, force: bool = False) -> dict:
     check_input(manifest)
     assert_visual(probe(visual), manifest['duration_frames'])
     voice_probe = probe(voice)
@@ -127,9 +150,14 @@ def assemble(manifest: dict, visual: Path, voice: Path, out: Path, *, dry_run: b
     duration = manifest['duration_frames'] / FPS
     plan = {'id': manifest['id'], 'status': 'PREFLIGHT_PASS', 'duration': duration,
             'frames': manifest['duration_frames'], 'visual_sha256': digest(visual),
-            'voice_sha256': digest(voice), 'review_only': True}
+            'voice_sha256': digest(voice), 'manifest_sha256': manifest_digest(manifest),
+            'review_only': True}
     if dry_run:
         return plan
+    if not force:
+        hit = cache_hit(out, manifest['id'], plan)
+        if hit is not None:
+            return hit
     out.mkdir(parents=True, exist_ok=True)
     if not out.is_dir():
         raise ValueError('Invalid output directory')
@@ -157,7 +185,8 @@ def assemble(manifest: dict, visual: Path, voice: Path, out: Path, *, dry_run: b
                  'output_bytes': finished.stat().st_size, 'audio_codec': 'aac',
                  'video_codec': 'h264', 'publish_authority': 'NONE', 'release_state': 'BLOCKED',
                  'subtitle_status': 'MANUAL_PHRASE_TIMING_NOT_WORD_CERTIFIED',
-                 'human_editorial_qa': 'PENDING', 'os_sandbox_certified': False})
+                 'human_editorial_qa': 'PENDING', 'os_sandbox_certified': False,
+                 'cache_hit': False})
     (out / 'receipt.json').write_text(json.dumps(plan, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     return plan
 
@@ -169,11 +198,12 @@ def main() -> None:
     parser.add_argument('--voice', required=True, help='Private local WAV/M4A/MP3, never committed')
     parser.add_argument('--out', required=True)
     parser.add_argument('--dry-run', action='store_true')
+    parser.add_argument('--force', action='store_true', help='Rebuild even if source and manifest hashes are unchanged')
     args = parser.parse_args()
     m = json.loads(local_file(args.manifest, {'.json'}).read_text(encoding='utf-8'))
     result = assemble(m, local_file(args.visual, {'.mp4'}),
                       local_file(args.voice, {'.wav', '.m4a', '.mp3'}),
-                      Path(args.out).expanduser().resolve(), dry_run=args.dry_run)
+                      Path(args.out).expanduser().resolve(), dry_run=args.dry_run, force=args.force)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

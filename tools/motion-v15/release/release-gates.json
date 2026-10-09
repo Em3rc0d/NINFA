@@ -1,0 +1,45 @@
+{
+  "version": "1.0.0",
+  "channel": "DoesItAutomate",
+  "short_id": "the-duplicate-webhook",
+  "content_type": "EVIDENCE_BACKED_LOCAL_SYNTHETIC",
+  "date": "2026-10-09",
+  "language": "en",
+  "gates": {
+    "synthetic_source_reproduced": "PASS",
+    "claim_provenance_context": "PASS",
+    "technical_mp4": "PASS",
+    "natural_voice_integrity": "PASS",
+    "phrase_caption_structure": "PASS",
+    "word_level_caption_listening": "PENDING",
+    "real_phone_overlay_review": "PENDING",
+    "rights_and_brand_final": "PENDING",
+    "human_release_approval": "PENDING"
+  },
+  "observed_media": {
+    "resolution": [
+      1080,
+      1920
+    ],
+    "fps": 30,
+    "frames": 630,
+    "duration_seconds_approx": 21,
+    "video_codec": "h264",
+    "audio_codec": "aac"
+  },
+  "facts": {
+    "deliveries": 2,
+    "without_unique_actions": 2,
+    "with_unique_actions": 1,
+    "real_provider_tested": false,
+    "concurrent_request_tested": false,
+    "evidence_digest": "8dc48cde916fc45617a8d0022dccddca98c2886ef38e5e48971edf22c3e516b7"
+  },
+  "source_voice_in_repository": false,
+  "private_media_in_repository": false,
+  "provider_receipt": null,
+  "status": "READY_FOR_OWNER_PHONE_QA",
+  "publish_authority": "NONE",
+  "scheduled": false,
+  "published": false
+}

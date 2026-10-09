@@ -102,7 +102,7 @@ def cache(d,m,t):
     # Persistent timebars with measured values, not render animation pretending benchmarking live.
     width=394;x=74;y0=290
     label(d,(x,y0),'ONE LOCAL HOST / OBSERVED RUN',SUB,16)
-    for i,(key,val,color) in enumerate([('FRESH ENCODE',4.80,BLUE),('CACHE HIT',1.15,GREEN)]):
+    for i,(key,val,color) in enumerate([(m['labels'][0],4.80,BLUE),(m['labels'][1],1.15,GREEN)]):
         y=y0+74+i*127
         label(d,(x,y),key,color,18)
         rr(d,(x,y+34,x+width,y+58),10,(29,46,65))
@@ -111,14 +111,14 @@ def cache(d,m,t):
         rr(d,(x,y+34,x+max(6,width*fill_fraction),y+58),10,color)
         label(d,(x+3,y+69),f'{val:.2f} s',INK,31)
     rr(d,(74,639,466,695),12,(17,52,55),(48,135,128))
-    centered(d,(270,651),'UNCHANGED INPUTS -> REUSE',19,GREEN)
+    centered(d,(270,651),f"UNCHANGED INPUTS -> {m['labels'][2]}",19,GREEN)
     # Controlled comparator scanning point moves continuously across the same chart.
     cx=74+int(width*(0.05+0.90*t));d.ellipse((cx-4,403,cx+4,411),fill=ACCENT)
 
 def breaker(d,m,t):
     # Horizontal response conduit that changes state across time.
     label(d,(77,283),'REQUEST ROUTING / SYNTHETIC EXAMPLE',SUB,16)
-    for i,n in enumerate(['CLIENT','SERVICE','FALLBACK']):
+    for i,n in enumerate(m['labels']):
         x=78+i*151;y=390
         active = (i==0) or (i==1 and .13<t<.55) or (i==2 and t>=.55)
         color=ACCENT if active else (55,78,98)

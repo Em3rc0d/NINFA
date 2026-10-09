@@ -1,0 +1,61 @@
+{
+  "schema": "ninfa-motion-v1.5",
+  "id": "the-duplicate-webhook",
+  "brand": "DoesItAutomate",
+  "language": "en",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "frames": 720
+  },
+  "status": "EVIDENCE_BACKED_LOCAL",
+  "family": "event_replay",
+  "evidence_sha256": "8dc48cde916fc45617a8d0022dccddca98c2886ef38e5e48971edf22c3e516b7",
+  "headlines": [
+    "SAME EVENT, TWICE",
+    "WITHOUT A GUARD: 2 ACTIONS",
+    "ADD A UNIQUE EVENT KEY",
+    "REPLAY BLOCKED: 1 ACTION",
+    "CONCURRENCY NOT TESTED"
+  ],
+  "voice_script": "I simulated a webhook arriving twice. Without a unique event key, SQLite stored two actions. Then I replayed it with a uniqueness guard: just one action was stored, and the duplicate was skipped. That's a local sequential test. Concurrency needs a different test.",
+  "caption_plan": [
+    {
+      "start_frame": 12,
+      "end_frame": 139,
+      "text": "I simulated a webhook arriving twice."
+    },
+    {
+      "start_frame": 140,
+      "end_frame": 284,
+      "text": "Without a unique event key, SQLite stored two actions."
+    },
+    {
+      "start_frame": 285,
+      "end_frame": 431,
+      "text": "Then I replayed it with a uniqueness guard."
+    },
+    {
+      "start_frame": 432,
+      "end_frame": 565,
+      "text": "One action was stored. The duplicate was skipped."
+    },
+    {
+      "start_frame": 566,
+      "end_frame": 648,
+      "text": "That's a local sequential test."
+    },
+    {
+      "start_frame": 649,
+      "end_frame": 720,
+      "text": "Concurrency needs a different test."
+    }
+  ],
+  "rules": {
+    "paid_api_usd": 0,
+    "media_actions": false,
+    "publish_authority": "NONE",
+    "raw_voice_in_git": false
+  }
+}

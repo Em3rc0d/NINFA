@@ -30,3 +30,13 @@ No GitHub Actions execution, paid inference, TTS or voice cloning. No media/voic
 5. Only then prepare a separately approved distribution artifact, title and description; publishing/scheduling needs a distinct provider authority and receipt.
 
 **Production principle:** a working visual scene is not a released Short. The evidence and motion are reproducible; user voice, final QA and publisher authorization remain the human gates.
+
+## Owner-voice release review (2026-10-09)
+
+The owner recorded English voice separately and approved the **original-source AAC without additional DSP** over the compressed/loudness-normalized variant. A separately delivered **private** 21-second/630-frame H.264/AAC review MP4 has exactly the same encoded AAC audio payload as the approved owner M4A. Eight English subtitles are manually timed at phrase level. The recorded 25/25 SQLite source regressions were rerun.
+
+- [Versioned QA and platform gate findings](../../docs/contracts/decisions/MOTION_V15_PUBLICATION_GATE_REVIEW_2026-10-09.md)
+- [Draft English YouTube distribution copy](release/DISTRIBUTION_DRAFT.md)
+- [Fail-closed release-gate state](release/release-gates.json)
+
+**Not ready to publish:** the possible bottom YouTube UI overlay on the factual disclaimer requires an actual phone/editor check, then listening verification of subtitle wording and an explicit separate release approval. This repo stores **no voice recordings or final MP4s**.

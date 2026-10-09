@@ -28,6 +28,8 @@ class Contract(unittest.TestCase):
  def test_false_evidence_promotion(self):self.check_bad(lambda x:x.update(mode='EVIDENCE_BACKED'),demo)
  def test_missing_demo_label(self):self.check_bad(lambda x:x['evidence'].update(disclosure='Illustration'),demo)
  def test_html_injection(self):self.check_bad(lambda x:x.update(message='<script>alert(1)</script>'))
+ def test_too_wide_title(self):self.check_bad(lambda x:x.update(title='W'*34))
+ def test_too_wide_breaker_node(self):self.check_bad(lambda x:x.update(labels=['LONG REQUEST NAME', 'SERVICE','FALLBACK']),demo)
  def test_frame_samples_vary(self):
   m=base;pixels=[engine.create_frame(m,i).resize((96,170)).tobytes() for i in [0,60,120,179]]
   self.assertEqual(len(set(pixels)),4)

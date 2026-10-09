@@ -1,0 +1,8 @@
+*.mp4
+*.m4a
+*.mp3
+*.wav
+*.mov
+*.receipt.json
+__pycache__/
+output/

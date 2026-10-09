@@ -26,6 +26,8 @@ Brand identity is frozen in [docs/BRAND_IDENTITY.md](docs/BRAND_IDENTITY.md).
 
 The owner-accepted **Shorts motion direction** and fail-closed audiovisual/QA contract are tracked in [Does It Automate? Shorts Motion v1](docs/contracts/DOES_IT_AUTOMATE_SHORTS_MOTION_V1.md) (creative principles accepted; prototype is not cleared for publication).
 
+A separate [Motion v1.3 local AV finisher](tools/motion-v13/README.md) can reuse already-rendered clean visuals, private voice and caption manifests with hash-keyed caching, but **does not** constitute a certified full video renderer or a publishing integration.
+
 ## North star
 
 Build an autonomous, profitable English-language technology media business where YouTube is the primary distribution channel and the content engine is the compounding asset.

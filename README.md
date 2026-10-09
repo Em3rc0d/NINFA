@@ -30,6 +30,8 @@ A separate [Motion v1.3 local AV finisher](tools/motion-v13/README.md) can reuse
 
 [Motion v1.4 Scene Engine](tools/motion-v14/README.md) adds **three bounded, manual, local-only visual composition families** that can generate clean silent MP4s compatible with v1.3. This is an engineering proof, not an authorized generalized video factory or release.
 
+[Motion v1.5 evidence-first production slice](tools/motion-v15/README.md) adds an independently reproducible SQLite duplicate-event case and a different local silent visual composition. It regenerates evidence before rendering, but still needs a new owner voice recording and manual review; it is not a publishing service.
+
 ## North star
 
 Build an autonomous, profitable English-language technology media business where YouTube is the primary distribution channel and the content engine is the compounding asset.

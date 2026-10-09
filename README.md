@@ -28,6 +28,8 @@ The owner-accepted **Shorts motion direction** and fail-closed audiovisual/QA co
 
 A separate [Motion v1.3 local AV finisher](tools/motion-v13/README.md) can reuse already-rendered clean visuals, private voice and caption manifests with hash-keyed caching, but **does not** constitute a certified full video renderer or a publishing integration.
 
+[Motion v1.4 Scene Engine](tools/motion-v14/README.md) adds **three bounded, manual, local-only visual composition families** that can generate clean silent MP4s compatible with v1.3. This is an engineering proof, not an authorized generalized video factory or release.
+
 ## North star
 
 Build an autonomous, profitable English-language technology media business where YouTube is the primary distribution channel and the content engine is the compounding asset.

@@ -1,0 +1,33 @@
+{
+  "schema": "ninfa-scene-v1.4.0",
+  "brand": "DoesItAutomate",
+  "language": "en",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "frames": 180
+  },
+  "policy": {
+    "paid_api_usd": 0,
+    "github_actions": false,
+    "publish_authority": "NONE",
+    "allow_raw_voice": false
+  },
+  "id": "breaker-demo",
+  "mode": "ILLUSTRATIVE_POC",
+  "family": "circuit_breaker",
+  "title": "FAIL FAST",
+  "eyebrow": "CONTROL FLOW / DEMO",
+  "message": "Timeout? Switch to a safe path.",
+  "labels": [
+    "CLIENT",
+    "SERVICE",
+    "FALLBACK"
+  ],
+  "evidence": {
+    "source": null,
+    "measurements": null,
+    "disclosure": "DEMO / No live requests or benchmark"
+  }
+}

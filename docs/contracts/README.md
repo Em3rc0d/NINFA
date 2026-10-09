@@ -10,6 +10,7 @@ This directory holds **versioned, reviewable channel-specific policies**, not ru
 - [Local validator](../../tools/contracts/validate_short_contract.mjs) and [19 offline unit scenarios](../../tools/contracts/test_short_contract.mjs)
 - [2026-10-08 Motion v1.2 voiced batch acceptance receipt](decisions/MOTION_V1_2_OWNER_UAT_2026-10-08.md) — owner accepted three reviewed shorts as audiovisual baseline; publication and general template certification remain separately gated.
 - [2026-10-08 Motion v1.3 local finishing proof](decisions/MOTION_V1_3_LOCAL_FINISHING_2026-10-08.md) — preflight, offline FFmpeg finishing, SHA-keyed cache and review-only QA; no full visual engine or release authority.
+- [Motion v1.4 Scene Engine ADR](decisions/MOTION_V1_4_SCENE_ENGINE_ADR.md) and [local proof receipt](decisions/MOTION_V1_4_LOCAL_PROOF_2026-10-08.md) — three separate visual families, 20 local unit tests, silent review-only outputs, no automated publishing.
 
 Run locally from the NINFA repository root (no CI, paid APIs, social app or personal voice required):
 

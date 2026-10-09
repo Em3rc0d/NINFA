@@ -93,5 +93,4 @@ def main() -> None:
     result=run_job(a.scene,a.finish,voice,Path(a.out).expanduser().resolve(),force=a.force)
     print(json.dumps(result,indent=2))
 
-
 if __name__=='__main__':main()

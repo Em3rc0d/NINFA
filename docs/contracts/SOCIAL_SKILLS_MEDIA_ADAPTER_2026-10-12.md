@@ -46,3 +46,7 @@ Proceso:
 
 ## Estado operativo
 No se han modificado scene engines, voz, contrato congelado, fixtures existentes ni pipeline de distribución. La adopción está documentada como handoff no autoritativo y solo puede convertirse en integración ejecutable tras E1-E8 y un owner UAT independiente. La prueba de contrato preexistente no suple la prueba de visuales ni rendimiento de vídeo.
+
+## QA de posts premium — 2026-10-12
+
+[Resumen de aceptación estética, uncanny valley, bytes finales y estados de publicación](PREMIUM_POST_MEDIA_QA_2026-10-12.md). Es extracción de conocimiento para medios, no un bridge ejecutable con PlacaClara ni una modificación del contrato audiovisual en inglés.

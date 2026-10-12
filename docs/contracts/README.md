@@ -30,3 +30,7 @@ For a production candidate, use a new fixture tied to a verified source and huma
 **Authority hierarchy:** frozen [Does It Automate? Brand v1](../BRAND_IDENTITY.md) > [Channel Thesis](../CHANNEL_THESIS.md) > this motion style contract > individual scene templates. A prodAgentic/global policy is not authorized by this directory.
 
 **Current status:** motion v1.0.0 creative policy is on `main`; the owner also accepted the voiced Motion v1.2 review batch as an audiovisual reference. Neither the original concept POC nor this batch constitutes publication authority, platform-safe-zone certification, or a generalized renderer/template certificate.
+
+## Transferencia de skills externas (no autoritativa)
+
+- [Adopción selectiva social-media-skills → NINFA (2026-10-12)](SOCIAL_SKILLS_MEDIA_ADAPTER_2026-10-12.md): handoff desde Content Seller, guiones originales, píxeles inspeccionados, límite de idioma/canal, protección de evidencia y autorización de publicación separada. No modifica la certificación de los Shorts existentes.

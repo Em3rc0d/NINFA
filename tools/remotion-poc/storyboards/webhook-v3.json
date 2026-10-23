@@ -1,0 +1,102 @@
+{
+  "schema": "ninfa-motion-grammar-v1",
+  "id": "webhook-v3-single-slice",
+  "kind": "webhook",
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "frames": 720,
+    "audio": "SILENT_REVIEW_ONLY"
+  },
+  "authority": {
+    "reviewOnly": true,
+    "publishAuthority": "NONE",
+    "releaseState": "BLOCKED",
+    "paidApisUsd": 0,
+    "githubMediaActions": false,
+    "logo": "CANONICAL_BYTES_NOT_AVAILABLE_OMIT"
+  },
+  "evidence": {
+    "sourceManifest": "tools/motion-v15/story.json",
+    "receipt": "tools/motion-v15/evidence/replay_evidence.json",
+    "receiptExperimentalMode": "LOCAL_SYNTHETIC_SEQUENTIAL",
+    "eventKey": "evt_local_001",
+    "attemptsPerCase": 2,
+    "naiveActions": 2,
+    "guardedActions": 1,
+    "concurrencyTested": false
+  },
+  "layout": {
+    "safeTop": 220,
+    "safeBottom": 350,
+    "safeSide": 85,
+    "captionReserveTop": 1460,
+    "captionReserveBottom": 1570
+  },
+  "shots": [
+    {
+      "id": "hook",
+      "start": 0,
+      "end": 78,
+      "headline": "ONE EVENT. TWO DELIVERIES.",
+      "action": "Reveal two distinct sequential tokens with the same synthetic event key",
+      "narration": "One synthetic event. Delivered twice.",
+      "source": "LOCAL_SYNTHETIC_SEQUENTIAL"
+    },
+    {
+      "id": "naive",
+      "start": 78,
+      "end": 210,
+      "headline": "NO UNIQUE KEY.",
+      "action": "Animate two deliveries entering the naive SQLite write lane in sequence; append exactly two rows",
+      "narration": "Without a uniqueness rule, both attempts write a row.",
+      "source": "naive.new_actions=2"
+    },
+    {
+      "id": "naive-result",
+      "start": 210,
+      "end": 294,
+      "headline": "TWO ACTIONS STORED.",
+      "action": "Hold the two persisted rows in the simulated ledger; highlight count 2",
+      "narration": "That leaves two actions from one event.",
+      "source": "naive.attempts=2;naive.new_actions=2"
+    },
+    {
+      "id": "constraint",
+      "start": 294,
+      "end": 399,
+      "headline": "ADD UNIQUE(event_key).",
+      "action": "Show the constraint inserted into an abstract pipeline; do not imply actual recorded GUI footage",
+      "narration": "Now add a unique key at the database.",
+      "source": "guarded SQLite unique index"
+    },
+    {
+      "id": "guarded",
+      "start": 399,
+      "end": 552,
+      "headline": "DUPLICATE BLOCKED.",
+      "action": "First delivery reaches SQLite and inserts one row; second token stops at the guard; neither token implies concurrent execution",
+      "narration": "The first insert succeeds. The next duplicate is ignored.",
+      "source": "guarded.inserted=[true,false]"
+    },
+    {
+      "id": "compare",
+      "start": 552,
+      "end": 636,
+      "headline": "2 → 1.",
+      "action": "Compare persisted naive count 2 against guarded count 1, without claiming global prevention",
+      "narration": "Same inputs: two writes before, one after.",
+      "source": "naive.new_actions=2;guarded.new_actions=1"
+    },
+    {
+      "id": "limitation",
+      "start": 636,
+      "end": 720,
+      "headline": "CONCURRENCY NOT TESTED.",
+      "action": "Show a final high-contrast scope disclaimer; no external provider or production reliability claim",
+      "narration": "Sequential SQLite only. Concurrency not tested.",
+      "source": "receipt.limitations"
+    }
+  ]
+}

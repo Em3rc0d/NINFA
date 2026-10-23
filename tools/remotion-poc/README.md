@@ -105,3 +105,14 @@ node scripts/render.mjs webhook-v3 "$review\\renders\\webhook-v3.mp4"
 ```
 
 A verified review render receives a storyboard SHA-256 and shot count in its `.review.json`. A successful export still **does not** authorize merging, publishing, announcing quality, or approving mobile/narration gates.
+
+### V3 visual inspection contact frames (local-only)
+
+After a successful render, generate **19 exact captured frames**: midpoint of every shot and both sides of each of the six cuts, with a local verification manifest. This tool rejects mismatched SHA-256 receipts or any output path within Git and will not overwrite existing QA artifacts:
+
+```powershell
+$review = "C:\\Users\\eduar\\Desktop\\Farid\\NINFA-Review"
+node scripts/inspect-webhook-v3.mjs "$review\\renders\\webhook-v3.mp4" "$review\\qa\\webhook-v3"
+```
+
+This is a QA aid, not a substitute for human/physical-phone review or a public publish gate. Keep `webhook-v3.mp4.review.json`, frame PNGs and the sampling manifest outside Git.

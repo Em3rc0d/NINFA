@@ -47,3 +47,18 @@ test('V3 CLI and component are present, V1/V2 remain in source',()=>{
  assert.match(scene,/plan\.shots\.find\(/);
  assert.doesNotMatch(scene,/<Stage /);
 });
+
+import {sampleFrames,CUT_BOUNDARIES,SHOT_MIDPOINTS} from '../scripts/webhook-v3-samples.mjs';
+test('visual QA samples seven beats plus both sides of all six cuts',()=>{
+ const frames=sampleFrames();
+ assert.equal(frames.length,19);
+ assert.deepEqual(frames,[...new Set(frames)].sort((a,b)=>a-b));
+ for(const n of SHOT_MIDPOINTS)assert.ok(frames.includes(n));
+ for(const n of CUT_BOUNDARIES){assert.ok(frames.includes(n-1));assert.ok(frames.includes(n));}
+});
+test('the guarded visual makes a real DB write then blocks only the duplicate',()=>{
+ const source=readFileSync(resolve(repo,'tools/remotion-poc/src/WebhookV3.tsx'),'utf8');
+ assert.match(source,/const acceptedEnd=635/);
+ assert.match(source,/const duplicateEnd=guarded\?510:635/);
+ assert.match(source,/guarded\?P\.red:P\.cyan/);
+});

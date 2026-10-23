@@ -1,6 +1,6 @@
 import {join} from 'node:path';
 
-const compositions = new Set(['CacheRace', 'WebhookReplay', 'AutomationFailure', 'CacheRaceV2', 'WebhookReplayV2', 'AutomationFailureV2']);
+const compositions = new Set(['CacheRace', 'WebhookReplay', 'AutomationFailure', 'CacheRaceV2', 'WebhookReplayV2', 'AutomationFailureV2', 'WebhookReplayV3']);
 
 /** Execute the installed Remotion CLI directly with Node, never through a shell. */
 export function buildRenderCommand({app, composition, output, propsFile, port}) {

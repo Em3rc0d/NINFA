@@ -8,18 +8,25 @@ import {spawnSync} from 'node:child_process';
 import {performance} from 'node:perf_hooks';
 import {chooseAvailablePort} from './render-port.mjs';
 import {buildRenderCommand} from './render-command.mjs';
+import {validateWebhookStoryboard} from './validate-webhook-storyboard.mjs';
 
 const app=resolve(dirname(fileURLToPath(import.meta.url)),'..'),root=resolve(app,'../..');
 const [kind,outArg]=process.argv.slice(2);
-const compositions={cache:'CacheRace',webhook:'WebhookReplay',automation:'AutomationFailure','cache-v2':'CacheRaceV2','webhook-v2':'WebhookReplayV2','automation-v2':'AutomationFailureV2'};
+const compositions={cache:'CacheRace',webhook:'WebhookReplay',automation:'AutomationFailure','cache-v2':'CacheRaceV2','webhook-v2':'WebhookReplayV2','automation-v2':'AutomationFailureV2','webhook-v3':'WebhookReplayV3'};
 if(!Object.hasOwn(compositions,kind)||!outArg||!isAbsolute(outArg)||!outArg.toLowerCase().endsWith('.mp4')){
- throw new Error('Usage: node scripts/render.mjs cache|webhook|automation|cache-v2|webhook-v2|automation-v2 /absolute/private/output.mp4');
+ throw new Error('Usage: node scripts/render.mjs cache|webhook|automation|cache-v2|webhook-v2|automation-v2|webhook-v3 /absolute/private/output.mp4');
 }
 const out=resolve(outArg);
 if(out.startsWith(root+sep))throw new Error('POLICY_BLOCKED: media output inside Git repository');
 if(existsSync(out))throw new Error('POLICY_BLOCKED: output already exists; choose a fresh name');
-const sourceKind=kind.endsWith('-v2')?kind.slice(0,-3):kind;
+const sourceKind=kind.endsWith('-v2')||kind.endsWith('-v3')?kind.slice(0,-3):kind;
 const props=load(sourceKind);
+let v3Plan=null;
+if(kind==='webhook-v3'){
+ v3Plan=JSON.parse(readFileSync(join(app,'storyboards','webhook-v3.json'),'utf8'));
+ const receipt=JSON.parse(readFileSync(join(root,'tools','motion-v15','evidence','replay_evidence.json'),'utf8'));
+ validateWebhookStoryboard(v3Plan,props,receipt);
+}
 if(props.releaseState!=='BLOCKED'||props.reviewOnly!==true)throw new Error('POLICY_BLOCKED: release authority');
 const cliEntry=join(app,'node_modules','@remotion','cli','remotion-cli.js');
 if(!existsSync(cliEntry))throw new Error('Remotion CLI not installed locally. Run npm install in tools/remotion-poc.');
@@ -47,6 +54,7 @@ try{
  const sha=(v)=>createHash('sha256').update(v).digest('hex');
  const receipt={
   experiment:kind,frames:expected,fps:30,width:1080,height:1920,elapsed_ms,
+  ...(v3Plan?{storyboard_sha256:sha(readFileSync(join(app,'storyboards','webhook-v3.json'))),shot_count:v3Plan.shots.length}:{}),
   video_sha256:sha(readFileSync(out)),props_sha256:sha(JSON.stringify(props)),
   release_state:'BLOCKED',publish_authority:'NONE',
   benchmark_note:'No same-host baseline was executed by this command'

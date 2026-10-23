@@ -1,0 +1,41 @@
+import {resolve,dirname,join,sep,isAbsolute} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {spawnSync} from 'node:child_process';
+import {readFileSync,existsSync,mkdirSync,writeFileSync,readdirSync,mkdtempSync,renameSync,rmSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {sampleFrames,CUT_BOUNDARIES,SHOT_MIDPOINTS} from './webhook-v3-samples.mjs';
+import {buildFrameExtractionCommand} from './webhook-v3-frame-command.mjs';
+
+const app=resolve(dirname(fileURLToPath(import.meta.url)),'..'),repo=resolve(app,'../..');
+const [input,outDirArg]=process.argv.slice(2);
+if(!input||!outDirArg||!isAbsolute(input)||!isAbsolute(outDirArg))throw new Error('Usage: node scripts/inspect-webhook-v3.mjs /absolute/webhook-v3.mp4 /absolute/private/qa/webhook-v3');
+const video=resolve(input),outDir=resolve(outDirArg);
+if(outDir.startsWith(repo+sep)||video.startsWith(repo+sep))throw new Error('POLICY_BLOCKED: media artifacts must remain outside Git checkout');
+if(!existsSync(video)||existsSync(outDir))throw new Error('POLICY_BLOCKED: input missing or QA output directory exists; choose a fresh QA directory');
+const receipt=JSON.parse(readFileSync(video+'.review.json','utf8'));
+const sha=(x)=>createHash('sha256').update(x).digest('hex');
+if(receipt.experiment!=='webhook-v3'||receipt.release_state!=='BLOCKED'||receipt.publish_authority!=='NONE'||receipt.frames!==720)throw new Error('POLICY_BLOCKED: review receipt is not for Webhook V3');
+if(receipt.video_sha256!==sha(readFileSync(video)))throw new Error('POLICY_BLOCKED: MP4 no longer matches its review receipt');
+const plan=readFileSync(join(app,'storyboards','webhook-v3.json'));
+if(receipt.storyboard_sha256!==sha(plan)||receipt.shot_count!==7)throw new Error('POLICY_BLOCKED: storyboard/shot count mismatch');
+const frames=sampleFrames();
+if(frames.length!==19)throw new Error('POLICY_BLOCKED: noncanonical frame sampling');
+// Keep an aborted extraction from leaving a half-written QA directory.
+// A sibling staging directory can be atomically renamed on the same volume.
+mkdirSync(dirname(outDir),{recursive:true});
+const stage=mkdtempSync(join(dirname(outDir),'.ninfa-webhook-v3-qa-'));
+try {
+ const {executable,args}=buildFrameExtractionCommand(video,join(stage,'frame-%03d.png'),frames);
+ const ff=spawnSync(executable,args,{encoding:'utf8',timeout:180000});
+ if(ff.error||ff.status!==0)throw new Error('FRAME_EXTRACT_FAILED: '+(ff.stderr||ff.error?.message||ff.status));
+ const actual=readdirSync(stage).filter(x=>x.endsWith('.png')).sort();
+ if(actual.length!==frames.length)throw new Error('FRAME_EXTRACT_MISMATCH: expected '+frames.length+' got '+actual.length);
+ const manifest={schema:'ninfa-webhook-v3-frame-qa-v1',release_state:'BLOCKED',source_video_sha256:receipt.video_sha256,storyboard_sha256:receipt.storyboard_sha256,frame_count:frames.length,samples:frames.map((frame,i)=>({frame,seconds:frame/30,file:actual[i],shot_midpoint:SHOT_MIDPOINTS.includes(frame),cut_before:CUT_BOUNDARIES.includes(frame+1),cut_after:CUT_BOUNDARIES.includes(frame)})),notes:['Source identity and frame extraction PASS are not a visual quality pass','Review each adjacent frame pair for text overlap','Check real mobile safe zones and actual audio/caption layout']};
+ writeFileSync(join(stage,'sampling-manifest.json'),JSON.stringify(manifest,null,2)+'\n');
+ // Fail closed if another process created the final output while we rendered.
+ if(existsSync(outDir))throw new Error('POLICY_BLOCKED: QA output directory appeared during extraction; choose another path');
+ renameSync(stage,outDir);
+ console.log(JSON.stringify({status:'FRAME_SAMPLES_READY_REVIEW_ONLY',folder:outDir,images:actual.length,cuts:CUT_BOUNDARIES.length,source_sha256:receipt.video_sha256},null,2));
+} finally {
+ if(existsSync(stage))rmSync(stage,{recursive:true,force:true});
+}

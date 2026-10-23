@@ -87,3 +87,48 @@ See [Motion V2 visual audit and acceptance](../../docs/contracts/decisions/REMOT
 **GO candidate only after:** 3 actual render proofs, typecheck and test results, mobile review, licensing/dependency audit, measured performance and separately verified v1.3 finishing. **HOLD currently.** Render PASS cannot authorize exporting, uploading or publishing. Never use GitHub Actions to synthesize voice/video. No paid APIs.
 
 ADR: `docs/decisions/ADR-2026-10-23-REMOTION-POC.md`.
+
+## Webhook V3 vertical slice (creative redesign after independent V2 visual FAIL)
+
+The pilot follows the [seven-shot motion grammar](../../docs/contracts/decisions/REMOTION_WEBHOOK_V3_MOTION_GRAMMAR_2026-10-23.md) and fixed [JSON storyboard](storyboards/webhook-v3.json). It does **not** create Cache V3 or Automation V3. V1 and V2 remain untouched.
+
+The new shots are strictly half-open (exactly one shot per frame), avoiding V2's text collisions. Tokens **actually travel** on sequential event lanes, SQLite rows accumulate, a unique-key guard rejects the second delivery, and a final frame explicitly states **CONCURRENCY NOT TESTED**. This is a **diagrammatic recreation of a local synthetic experiment**, not actual external webhook evidence. No new API spend, no new logo, no added voice.
+
+On Windows PowerShell after fetching `exp/remotion-webhook-vertical-slice-20261023`:
+
+```powershell
+cd "C:\\Users\\eduar\\Desktop\\Farid\\NINFA\\tools\\remotion-poc"
+npm test
+npm run typecheck
+$review = "C:\\Users\\eduar\\Desktop\\Farid\\NINFA-Review"
+node scripts/render.mjs webhook-v3 "$review\\renders\\webhook-v3.mp4"
+```
+
+A verified review render receives a storyboard SHA-256 and shot count in its `.review.json`. A successful export still **does not** authorize merging, publishing, announcing quality, or approving mobile/narration gates.
+
+### V3 visual inspection contact frames (local-only)
+
+After a successful render, generate **19 exact captured frames**: midpoint of every shot and both sides of each of the six cuts, with a local verification manifest. This tool rejects mismatched SHA-256 receipts or any output path within Git and will not overwrite existing QA artifacts:
+
+```powershell
+$review = "C:\\Users\\eduar\\Desktop\\Farid\\NINFA-Review"
+node scripts/inspect-webhook-v3.mjs "$review\\renders\\webhook-v3.mp4" "$review\\qa\\webhook-v3"
+```
+
+This is a QA aid, not a substitute for human/physical-phone review or a public publish gate. Keep `webhook-v3.mp4.review.json`, frame PNGs and the sampling manifest outside Git.
+
+### FFmpeg compatibility fix — 2026-10-23 Windows QA
+
+The owner rendered `webhook-v3.mp4` successfully: **24/24 tests**, TypeScript PASS, 720 H.264 frames, 1080×1920 at 30fps, `shot_count=7`, and `video_sha256=57ef46fcdc5921c2efdf1e8cd579baa7b93f18447f961ccdc51d13979746d610`. The `inspect-webhook-v3.mjs` extraction alone failed because the Windows FFmpeg build rejects deprecated `-vsync vfr`. **Do not rerender the video.**
+
+The QA tool now uses `-fps_mode vfr`, validated on the same sampling expression with a 720-frame Webhook V2 video under FFmpeg 7.1.5 (19/19 frames). It stages extractions in a new private temporary folder and renames it only after all 19 images and the manifest are written, cleaning up staging on failure. The previous failed run may have left an **empty** `qa/webhook-v3` directory. For a non-destructive retry use a different name:
+
+```powershell
+cd "C:\\Users\\eduar\\Desktop\\Farid\\NINFA"
+git pull --ff-only
+cd tools/remotion-poc
+npm test
+node scripts/inspect-webhook-v3.mjs "$review\\renders\\webhook-v3.mp4" "$review\\qa\\webhook-v3-fixed"
+```
+
+This does not change the MP4, its source/manifest SHA or the seven-shot creative work. Upload the video for **independent visual review**; shell success and image extraction alone do not pass that gate.

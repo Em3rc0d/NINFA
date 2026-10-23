@@ -107,3 +107,37 @@ python -u tools/editorial-proof-01/live_replay.py --out "$live" --pause-seconds 
 Recording the fresh live operations (4 attempts, separate connections) gives evidence-backed action shots; use a local path such as `NINFA-Review/capture/editorial-proof-01-live.mkv` for the OBS recording. Stop after the final `REVIEW ONLY` notice. The command creates a fresh uniquely named directory with separate `naive.sqlite`, `guarded.sqlite`, and `replay_evidence.json` and **refuses any overwrite**. The original evidence remains unchanged. This is a **new run**, not footage from a historical run.
 
 Do not claim provider delivery, concurrency safety, exactly-once production behavior or complete professional edit. Passing tests is the source-footage gate, not editorial acceptance.
+
+
+## Natural English narration when the original approved voice file is unavailable
+
+The owner confirmed that the historical approved M4A/WAV is **not available**. **Do not ask for it again**, and do not default to eSpeak. The existing NINFA Chatterbox Multilingual UI explicitly requires a voice-reference audio or video file, making it unsuitable *without collecting a new reference recording*.
+
+A **separate reference-free voice audition** is prepared in `voice_ab_kokoro.py` using official [hexgrad/Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) preset English voices `am_michael` and `af_heart`, both running against the same fact-bounded English excerpt. Kokoro model weights are offered under Apache 2.0; inspect all runtime/dependency licenses for commercial packaging and model cache usage before any release. **Downloading model weights the first time requires internet access** even though generation thereafter is local. No paid speech API or GitHub Actions are required.
+
+Recommended **separate WSL Ubuntu/Debian Python 3.11/3.12 virtual environment** (don't install into the owner's Windows Python 3.14 or Chatterbox Docker environment):
+
+```bash
+cd /mnt/c/Users/eduar/Desktop/Farid/NINFA
+python3 --version                  # use Python 3.11 or 3.12
+python3 -m venv "$HOME/.venvs/ninfa-kokoro"
+source "$HOME/.venvs/ninfa-kokoro/bin/activate"
+sudo apt-get update
+sudo apt-get install -y espeak-ng
+python -m pip install --upgrade pip
+python -m pip install 'kokoro>=0.9.2' soundfile
+
+out="/mnt/c/Users/eduar/Desktop/Farid/NINFA-Review/voice-ab/kokoro-$(date +%Y%m%d-%H%M%S)"
+python tools/editorial-proof-01/voice_ab_kokoro.py --out "$out" --dry-run
+python tools/editorial-proof-01/voice_ab_kokoro.py --out "$out"
+```
+
+If WSL's default Python is not 3.11/3.12, choose an existing compatible interpreter for this venv rather than changing the global interpreter. The dry-run needs only the Python standard library. The actual audition creates two WAVs and an `audition.json` in a **new folder outside the repo**. It refuses overwrites. Model weights are downloaded locally on first use. Actual inference success, voice quality, CPU/GPU speed and dependency resolution have **not yet been verified on the owner's host**.
+
+Before running an actual inference, optional standard-library regression checks:
+
+```bash
+python -m unittest discover -s tools/editorial-proof-01 -p "test_voice_ab_kokoro.py" -v
+```
+
+**Editorial decision gate:** Listen to the two samples at normal phone volume. If both sound synthetic/robotic, reject the voice path. This is **not** a voice clone and cannot claim to recreate the absent approved voice. Choose a preset only after human acceptance. Do **not** compose another 24s video or rush to final mix before an acceptable narrator and crisp screen footage exist. Avoid publishing the audition or committing WAVs.

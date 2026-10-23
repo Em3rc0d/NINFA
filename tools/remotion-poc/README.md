@@ -116,3 +116,19 @@ node scripts/inspect-webhook-v3.mjs "$review\\renders\\webhook-v3.mp4" "$review\
 ```
 
 This is a QA aid, not a substitute for human/physical-phone review or a public publish gate. Keep `webhook-v3.mp4.review.json`, frame PNGs and the sampling manifest outside Git.
+
+### FFmpeg compatibility fix — 2026-10-23 Windows QA
+
+The owner rendered `webhook-v3.mp4` successfully: **24/24 tests**, TypeScript PASS, 720 H.264 frames, 1080×1920 at 30fps, `shot_count=7`, and `video_sha256=57ef46fcdc5921c2efdf1e8cd579baa7b93f18447f961ccdc51d13979746d610`. The `inspect-webhook-v3.mjs` extraction alone failed because the Windows FFmpeg build rejects deprecated `-vsync vfr`. **Do not rerender the video.**
+
+The QA tool now uses `-fps_mode vfr`, validated on the same sampling expression with a 720-frame Webhook V2 video under FFmpeg 7.1.5 (19/19 frames). It stages extractions in a new private temporary folder and renames it only after all 19 images and the manifest are written, cleaning up staging on failure. The previous failed run may have left an **empty** `qa/webhook-v3` directory. For a non-destructive retry use a different name:
+
+```powershell
+cd "C:\\Users\\eduar\\Desktop\\Farid\\NINFA"
+git pull --ff-only
+cd tools/remotion-poc
+npm test
+node scripts/inspect-webhook-v3.mjs "$review\\renders\\webhook-v3.mp4" "$review\\qa\\webhook-v3-fixed"
+```
+
+This does not change the MP4, its source/manifest SHA or the seven-shot creative work. Upload the video for **independent visual review**; shell success and image extraction alone do not pass that gate.

@@ -62,3 +62,18 @@ test('the guarded visual makes a real DB write then blocks only the duplicate',(
  assert.match(source,/const duplicateEnd=guarded\?510:635/);
  assert.match(source,/guarded\?P\.red:P\.cyan/);
 });
+
+import {buildFrameExtractionCommand} from '../scripts/webhook-v3-frame-command.mjs';
+test('frame sampling uses modern FFmpeg fps_mode vfr and no removed vsync',()=>{
+ const frames=sampleFrames();
+ const cmd=buildFrameExtractionCommand('C:\\test\\video.mp4','C:\\test\\frames\\frame-%03d.png',frames);
+ assert.equal(cmd.executable,'ffmpeg');
+ assert.deepEqual(cmd.args.slice(-8),['-fps_mode','vfr','-start_number','0','-frames:v','19','C:\\test\\frames\\frame-%03d.png'].slice(-8));
+ assert.ok(!cmd.args.includes('-vsync'));
+ assert.equal(cmd.args[cmd.args.indexOf('-vf')+1].split('+').length,19);
+});
+test('reject incomplete, repeated or unordered frame selections',()=>{
+ const frames=sampleFrames();
+ assert.throws(()=>buildFrameExtractionCommand('a','b',frames.slice(0,-1)),/POLICY_BLOCKED/);
+ assert.throws(()=>buildFrameExtractionCommand('a','b',[...frames.slice(0,18),frames[0]]),/POLICY_BLOCKED/);
+});

@@ -1,9 +1,10 @@
 import {resolve,dirname,join,sep,isAbsolute} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
-import {readFileSync,existsSync,mkdirSync,writeFileSync,readdirSync} from 'node:fs';
+import {readFileSync,existsSync,mkdirSync,writeFileSync,readdirSync,mkdtempSync,renameSync,rmSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {sampleFrames,CUT_BOUNDARIES,SHOT_MIDPOINTS} from './webhook-v3-samples.mjs';
+import {buildFrameExtractionCommand} from './webhook-v3-frame-command.mjs';
 
 const app=resolve(dirname(fileURLToPath(import.meta.url)),'..'),repo=resolve(app,'../..');
 const [input,outDirArg]=process.argv.slice(2);
@@ -19,12 +20,22 @@ const plan=readFileSync(join(app,'storyboards','webhook-v3.json'));
 if(receipt.storyboard_sha256!==sha(plan)||receipt.shot_count!==7)throw new Error('POLICY_BLOCKED: storyboard/shot count mismatch');
 const frames=sampleFrames();
 if(frames.length!==19)throw new Error('POLICY_BLOCKED: noncanonical frame sampling');
-mkdirSync(outDir,{recursive:true});
-const select='select='+frames.map(x=>'eq(n\\,'+x+')').join('+');
-const ff=spawnSync('ffmpeg',['-hide_banner','-loglevel','error','-i',video,'-vf',select,'-vsync','vfr','-start_number','0','-frames:v',String(frames.length),join(outDir,'frame-%03d.png')],{encoding:'utf8',timeout:180000});
-if(ff.error||ff.status!==0)throw new Error('FRAME_EXTRACT_FAILED: '+(ff.stderr||ff.error?.message||ff.status));
-const actual=readdirSync(outDir).filter(x=>x.endsWith('.png')).sort();
-if(actual.length!==frames.length)throw new Error('FRAME_EXTRACT_MISMATCH: expected '+frames.length+' got '+actual.length);
-const manifest={schema:'ninfa-webhook-v3-frame-qa-v1',release_state:'BLOCKED',source_video_sha256:receipt.video_sha256,storyboard_sha256:receipt.storyboard_sha256,frame_count:frames.length,samples:frames.map((frame,i)=>({frame,seconds:frame/30,file:actual[i],shot_midpoint:SHOT_MIDPOINTS.includes(frame),cut_before:CUT_BOUNDARIES.includes(frame+1),cut_after:CUT_BOUNDARIES.includes(frame)})),notes:['Source identity and frame extraction PASS are not a visual quality pass','Review each adjacent frame pair for text overlap','Check real mobile safe zones and actual audio/caption layout']};
-writeFileSync(join(outDir,'sampling-manifest.json'),JSON.stringify(manifest,null,2)+'\n');
-console.log(JSON.stringify({status:'FRAME_SAMPLES_READY_REVIEW_ONLY',folder:outDir,images:actual.length,cuts:CUT_BOUNDARIES.length,source_sha256:receipt.video_sha256},null,2));
+// Keep an aborted extraction from leaving a half-written QA directory.
+// A sibling staging directory can be atomically renamed on the same volume.
+mkdirSync(dirname(outDir),{recursive:true});
+const stage=mkdtempSync(join(dirname(outDir),'.ninfa-webhook-v3-qa-'));
+try {
+ const {executable,args}=buildFrameExtractionCommand(video,join(stage,'frame-%03d.png'),frames);
+ const ff=spawnSync(executable,args,{encoding:'utf8',timeout:180000});
+ if(ff.error||ff.status!==0)throw new Error('FRAME_EXTRACT_FAILED: '+(ff.stderr||ff.error?.message||ff.status));
+ const actual=readdirSync(stage).filter(x=>x.endsWith('.png')).sort();
+ if(actual.length!==frames.length)throw new Error('FRAME_EXTRACT_MISMATCH: expected '+frames.length+' got '+actual.length);
+ const manifest={schema:'ninfa-webhook-v3-frame-qa-v1',release_state:'BLOCKED',source_video_sha256:receipt.video_sha256,storyboard_sha256:receipt.storyboard_sha256,frame_count:frames.length,samples:frames.map((frame,i)=>({frame,seconds:frame/30,file:actual[i],shot_midpoint:SHOT_MIDPOINTS.includes(frame),cut_before:CUT_BOUNDARIES.includes(frame+1),cut_after:CUT_BOUNDARIES.includes(frame)})),notes:['Source identity and frame extraction PASS are not a visual quality pass','Review each adjacent frame pair for text overlap','Check real mobile safe zones and actual audio/caption layout']};
+ writeFileSync(join(stage,'sampling-manifest.json'),JSON.stringify(manifest,null,2)+'\n');
+ // Fail closed if another process created the final output while we rendered.
+ if(existsSync(outDir))throw new Error('POLICY_BLOCKED: QA output directory appeared during extraction; choose another path');
+ renameSync(stage,outDir);
+ console.log(JSON.stringify({status:'FRAME_SAMPLES_READY_REVIEW_ONLY',folder:outDir,images:actual.length,cuts:CUT_BOUNDARIES.length,source_sha256:receipt.video_sha256},null,2));
+} finally {
+ if(existsSync(stage))rmSync(stage,{recursive:true,force:true});
+}

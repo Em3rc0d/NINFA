@@ -4,8 +4,9 @@
 
 ## Binding decision from owner
 
-- **Additional cash spend hard ceiling: S/ 0.00.** No subscriptions, purchased credits, paid APIs, hosted model inference, paid stock assets, outsourcing, video-rendering services, or GitHub Actions used as render/AI infrastructure.
-- Existing Windows machine, existing internet plan, local storage, electricity, time and any software already available can be used. “S/0 additional spend” does **not** mean computing has literally zero electricity/time cost.
+- **Additional cash spend hard ceiling: S/ 0.00.** No **new** subscriptions, purchased credits, paid APIs, hosted model inference, paid stock assets, outsourcing, video-rendering services, or GitHub Actions used as render/AI infrastructure.
+- **Existing paid subscription explicitly disclosed by owner: ChatGPT Plus.** It is a pre-existing household/project expense, **not** a free service, and must not be counted as newly purchased NINFA tooling or hidden in zero-cost claims. Its future subscription fees remain real even though the target **incremental cash spend is S/ 0.00**.
+- Existing Windows machine, existing internet plan, local storage, electricity, time, ChatGPT Plus entitlement already paid for, and software already installed can be used. “S/0 additional spend” does **not** mean computing or ChatGPT Plus has literally zero economic cost. ChatGPT Plus does not by itself entitle this project to unlimited paid API credits.
 - **Quality target:** Looks like an intentionally edited human-made technology explainer. Previous V1–V3 presentations and the two private edited Webhook pilots failed owner visual review. Technical MP4 export and source-video correctness do NOT satisfy that creative gate.
 - **Preferred narrator:** local Windows Kokoro `am_adam`, previously accepted by owner at preset `speed=0.96`. Do not fall back to eSpeak. No voice-cloning reference required.
 - Preserve NINFA brand truth, evidence provenance, no fake recorded facts, no fabricated AI capabilities, no silent automatic publishing.

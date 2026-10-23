@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Private offline-after-model-download A/B audition of Kokoro presets.
+"""Private local Kokoro narration check using owner-selected am_adam preset.
 
 No reference voice, voice cloning, paid API, secret, auto-publish or video edit.
-Requires WSL/Linux Python 3.11/3.12, espeak-ng and Kokoro installed independently.
+Use the owner's already installed Windows Kokoro Python environment; no reinstall.
 """
 from __future__ import annotations
 
@@ -13,7 +13,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 LANGUAGE = "a"  # American English; matches official Kokoro preset codes
-VOICES = ("am_michael", "af_heart")
+VOICES = ("am_adam",)
+SPEED = 0.96  # Existing owner-selected narration setting
 AUDITION_SCRIPT = (
     "I replayed the same synthetic event twice. "
     "Without a unique key, SQLite stored two actions. "
@@ -35,8 +36,9 @@ def preview(out_dir: Path, dry_run: bool) -> dict:
     out = check_destination(out_dir)
     report = {
         "schema": "ninfa-kokoro-audition-v1",
-        "purpose": "Private reference-free English voice A/B audition, NOT release",
+        "purpose": "Private reference-free English am_adam narration preview, NOT release",
         "voices": list(VOICES),
+        "speed": SPEED,
         "script": AUDITION_SCRIPT,
         "script_sha256": hashlib.sha256(AUDITION_SCRIPT.encode("utf8")).hexdigest(),
         "backend": "hexgrad/Kokoro-82M; model/voices per upstream license",
@@ -55,14 +57,14 @@ def preview(out_dir: Path, dry_run: bool) -> dict:
         from kokoro import KPipeline
     except ImportError as err:
         raise RuntimeError(
-            "Kokoro dependencies missing. Use a separate WSL Python 3.11/3.12 venv: "
-            "pip install 'kokoro>=0.9.2' soundfile; install espeak-ng first."
+            "Kokoro dependencies missing in selected Python. Use the owner-existing "
+            "Windows Kokoro Python environment; do not reinstall by default."
         ) from err
     pipeline = KPipeline(lang_code=LANGUAGE)
     audio_files = {}
     for voice in VOICES:
         samples = []
-        for _gs, _ps, audio in pipeline(AUDITION_SCRIPT, voice=voice):
+        for _gs, _ps, audio in pipeline(AUDITION_SCRIPT, voice=voice, speed=SPEED):
             signal = np.asarray(audio, dtype=np.float32).reshape(-1)
             if not np.all(np.isfinite(signal)):
                 raise ValueError("POLICY_BLOCKED: model returned non-finite audio")
@@ -75,12 +77,12 @@ def preview(out_dir: Path, dry_run: bool) -> dict:
             raise ValueError("POLICY_BLOCKED: invalid PCM amplitude or length")
         audio_files[voice] = concatenated
 
-    # Fail-closed and no output overwrite. Create only after valid PCM for both voices.
+    # Fail-closed and no output overwrite. Create only after valid PCM.
     out.mkdir(parents=True, exist_ok=False)
     try:
         for voice, audio in audio_files.items():
             sf.write(str(out / (voice + ".wav")), audio, 24000, subtype="PCM_16")
-        report["status"] = "VOICE_AUDITION_READY_HUMAN_REVIEW"
+        report["status"] = "AM_ADAM_NARRATION_READY_HUMAN_REVIEW"
         report["duration_seconds"] = {
             voice: round(float(len(audio) / 24000), 3)
             for voice, audio in audio_files.items()

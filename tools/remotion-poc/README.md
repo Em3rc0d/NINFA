@@ -69,6 +69,19 @@ After the Studio/:3000 conflict was fixed, the owner reported **10/10 tests, Typ
 
 Node 24 emitted `DEP0190` due to the Windows shell wrapper. We now execute the installed Remotion CLI JavaScript entrypoint directly through `process.execPath` with `shell:false`. The separate-port logic remains unchanged. The owner subsequently confirmed **13/13 tests PASS**, TypeScript typecheck PASS and a full hardened CacheRace MP4 render on Windows Node 24.11.1 with no DEP0190 warning (commit `f5606c2`). Its SHA-256 matches the pre-hardening render. The remaining gates concern visual QA, Pillow comparisons, v1.3 finishing, dependency/rights review and release authority.
 
+## Motion V2 — optional comparative visual study
+
+The original `CacheRace`, `WebhookReplay`, and `AutomationFailure` compositions remain available and unchanged. V2 adds separate **story-driven, silent** versions — process changes, local sequential event replay and evidence-backed third-party workflow breakdown — without modifying any source fact or release authority.
+
+```powershell
+$review = "C:\\Users\\eduar\\Desktop\\Farid\\NINFA-Review"
+node scripts/render.mjs cache-v2 "$review\\renders\\cache-v2.mp4"
+node scripts/render.mjs webhook-v2 "$review\\renders\\webhook-v2.mp4"
+node scripts/render.mjs automation-v2 "$review\\renders\\automation-v2.mp4"
+```
+
+See [Motion V2 visual audit and acceptance](../../docs/contracts/decisions/REMOTION_MOTION_V2_REDESIGN_2026-10-23.md). Visual qualification and actual frame QA remain open until the owner renders and reviews the V2 MP4s. The old v0.1 videos are the quality baseline.
+
 ## Go/no-go
 
 **GO candidate only after:** 3 actual render proofs, typecheck and test results, mobile review, licensing/dependency audit, measured performance and separately verified v1.3 finishing. **HOLD currently.** Render PASS cannot authorize exporting, uploading or publishing. Never use GitHub Actions to synthesize voice/video. No paid APIs.

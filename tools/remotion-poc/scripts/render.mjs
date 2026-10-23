@@ -11,14 +11,15 @@ import {buildRenderCommand} from './render-command.mjs';
 
 const app=resolve(dirname(fileURLToPath(import.meta.url)),'..'),root=resolve(app,'../..');
 const [kind,outArg]=process.argv.slice(2);
-const compositions={cache:'CacheRace',webhook:'WebhookReplay',automation:'AutomationFailure'};
+const compositions={cache:'CacheRace',webhook:'WebhookReplay',automation:'AutomationFailure','cache-v2':'CacheRaceV2','webhook-v2':'WebhookReplayV2','automation-v2':'AutomationFailureV2'};
 if(!Object.hasOwn(compositions,kind)||!outArg||!isAbsolute(outArg)||!outArg.toLowerCase().endsWith('.mp4')){
- throw new Error('Usage: node scripts/render.mjs cache|webhook|automation /absolute/private/output.mp4');
+ throw new Error('Usage: node scripts/render.mjs cache|webhook|automation|cache-v2|webhook-v2|automation-v2 /absolute/private/output.mp4');
 }
 const out=resolve(outArg);
 if(out.startsWith(root+sep))throw new Error('POLICY_BLOCKED: media output inside Git repository');
 if(existsSync(out))throw new Error('POLICY_BLOCKED: output already exists; choose a fresh name');
-const props=load(kind);
+const sourceKind=kind.endsWith('-v2')?kind.slice(0,-3):kind;
+const props=load(sourceKind);
 if(props.releaseState!=='BLOCKED'||props.reviewOnly!==true)throw new Error('POLICY_BLOCKED: release authority');
 const cliEntry=join(app,'node_modules','@remotion','cli','remotion-cli.js');
 if(!existsSync(cliEntry))throw new Error('Remotion CLI not installed locally. Run npm install in tools/remotion-poc.');
@@ -39,7 +40,7 @@ try{
  if(probe.error||probe.status!==0)throw new Error('FFPROBE_FAILED');
  const streams=JSON.parse(probe.stdout).streams||[];
  const v=streams.find(s=>s.codec_type==='video');
- const expected=kind==='webhook'?720:180;
+ const expected=sourceKind==='webhook'?720:180;
  if(!v||v.codec_name!=='h264'||v.width!==1080||v.height!==1920||Number(v.nb_read_frames)!==expected||v.r_frame_rate!=='30/1'||streams.some(s=>s.codec_type==='audio')){
   throw new Error('POLICY_BLOCKED: unexpected frames, codec, fps or audio');
  }

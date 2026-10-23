@@ -23,3 +23,8 @@ test('reject unknown Remotion composition',()=>assert.throws(
 test('reject invalid Remotion port',()=>assert.throws(
  ()=>buildRenderCommand({...input,port:0}),/POLICY_BLOCKED/
 ));
+
+test('V2 composition is constrained but supported',()=>{
+ const cmd=buildRenderCommand({...input,composition:'CacheRaceV2'});
+ assert.ok(cmd.args.includes('CacheRaceV2'));
+});

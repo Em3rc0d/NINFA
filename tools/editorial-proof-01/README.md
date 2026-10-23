@@ -73,3 +73,37 @@ python -m unittest discover -s tools/editorial-proof-01 -p "test_*.py" -v
 \`\`\`
 
 **Expected:** 5 tests PASS on Windows Python 3.14. If so, run \`inspect_sqlite.py\` on the existing \`$evidence\` folder as already documented; no regeneration or deletion of the evidence directory is needed. The owner Windows 5/5 result has not yet been observed, even though the close-on-exception mechanism has been smoke-tested locally under Python 3.13. Output remains private and release BLOCKED.
+
+
+## Editorial capture update — LIVE sequential INSERT replay
+
+The original `inspect_sqlite.py` records a **genuine read-only inspection** of persisted rows. On its own that four-stage terminal readout would be another static informational slideshow. The recommended **primary footage** is now an additional `live_replay.py` which performs a **new live synthetic sequential SQLite execution** and prints actual affected row counts immediately after each of the four `INSERT OR IGNORE` attempts.
+
+Distinct sources for the editor:
+- **Primary footage:** fresh live attempts (without UNIQUE → inserted + inserted; with UNIQUE → inserted + duplicate skipped), clearly labeled new local replay
+- **Supporting evidence cutaway:** earlier read-only `inspect_sqlite.py` and the receipt/unique index after the test
+- **Not evidence:** illustrative animations treated as real captured workflows
+
+No programmatic camera shake, PowerPoint export, artificial transition or robot voice is generated.
+
+### Windows capture, safely outside the Git checkout
+
+After pulling this experimental branch, from the NINFA root:
+
+```powershell
+cd "C:\Users\eduar\Desktop\Farid\NINFA"
+git pull --ff-only
+python -m unittest discover -s tools/editorial-proof-01 -p "test_*.py" -v
+$live = "C:\Users\eduar\Desktop\Farid\NINFA-Review\capture\live-$(Get-Date -Format yyyyMMdd-HHmmss)"
+```
+
+**Expect 9 tests.** Start OBS Window Capture on a clean Windows Terminal, with a legible font and no usernames/secrets/notifications. Start recording first, then run:
+
+```powershell
+Clear-Host
+python -u tools/editorial-proof-01/live_replay.py --out "$live" --pause-seconds 1.5
+```
+
+Recording the fresh live operations (4 attempts, separate connections) gives evidence-backed action shots; use a local path such as `NINFA-Review/capture/editorial-proof-01-live.mkv` for the OBS recording. Stop after the final `REVIEW ONLY` notice. The command creates a fresh uniquely named directory with separate `naive.sqlite`, `guarded.sqlite`, and `replay_evidence.json` and **refuses any overwrite**. The original evidence remains unchanged. This is a **new run**, not footage from a historical run.
+
+Do not claim provider delivery, concurrency safety, exactly-once production behavior or complete professional edit. Passing tests is the source-footage gate, not editorial acceptance.

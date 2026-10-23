@@ -7,7 +7,8 @@ import sys
 import json
 import sqlite3
 import io
-from contextlib import redirect_stdout
+from contextlib import closing, redirect_stdout
+from unittest.mock import patch
 import subprocess
 
 SCRIPT = Path(__file__).with_name("inspect_sqlite.py")
@@ -44,16 +45,45 @@ class InspectorTests(unittest.TestCase):
             mod.verify_receipt(self.folder)
 
     def test_refuse_mutated_sqlite_db(self):
-        with sqlite3.connect(self.folder / "guarded.sqlite") as con:
+        with closing(sqlite3.connect(self.folder / "guarded.sqlite")) as con, con:
             con.execute("DELETE FROM actions")
         with self.assertRaisesRegex(ValueError, "POLICY_BLOCKED"):
             mod.inspect_db(self.folder / "guarded.sqlite", True)
 
     def test_refuse_removed_unique_index(self):
-        with sqlite3.connect(self.folder / "guarded.sqlite") as con:
+        with closing(sqlite3.connect(self.folder / "guarded.sqlite")) as con, con:
             con.execute("DROP INDEX idx_actions_event_key")
         with self.assertRaisesRegex(ValueError, "POLICY_BLOCKED"):
             mod.inspect_db(self.folder / "guarded.sqlite", True)
+
+    def test_explicit_connection_close_on_success_and_failure(self):
+        # Regression: sqlite3.Connection.__exit__ does NOT close the database.
+        # Windows prevents TemporaryDirectory cleanup while handles stay open.
+        real_connect = sqlite3.connect
+        active = []
+
+        class TrackedConnection(sqlite3.Connection):
+            closed = False
+
+            def close(self):
+                self.closed = True
+                return super().close()
+
+        def tracked_connect(*args, **kwargs):
+            con = real_connect(*args, **kwargs, factory=TrackedConnection)
+            active.append(con)
+            return con
+
+        with patch.object(sqlite3, "connect", side_effect=tracked_connect):
+            mod.inspect_db(self.folder / "naive.sqlite", False)
+            mod.inspect_db(self.folder / "guarded.sqlite", True)
+            with self.assertRaisesRegex(ValueError, "POLICY_BLOCKED"):
+                mod.inspect_db(self.folder / "guarded.sqlite", False)
+
+        self.assertEqual(len(active), 3)
+        self.assertTrue(all(con.closed for con in active),
+                        "All SQLite connections must close even on validation failures")
+
 
 if __name__ == "__main__":
     unittest.main()

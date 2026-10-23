@@ -6,6 +6,7 @@ import {tmpdir} from 'node:os';
 import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {performance} from 'node:perf_hooks';
+import {chooseAvailablePort} from './render-port.mjs';
 
 const app=resolve(dirname(fileURLToPath(import.meta.url)),'..'),root=resolve(app,'../..');
 const [kind,outArg]=process.argv.slice(2);
@@ -25,7 +26,11 @@ const tmp=mkdtempSync(join(tmpdir(),'ninfa-remotion-'));
 try{
  const propFile=join(tmp,'props.json');writeFileSync(propFile,JSON.stringify(props));
  const started=performance.now();
- const render=spawnSync(binary,['render',join(app,'src/index.ts'),compositions[kind],out,'--props='+propFile,'--codec=h264','--concurrency=2'],{cwd:app,stdio:'inherit',timeout:900000,shell:process.platform==='win32'});
+ const renderPort=await chooseAvailablePort();
+ // Explicitly isolate the rendering server from a running Remotion Studio (usually :3000).
+ // This port is allocated by the OS; never assume Studio is stopped or 3001 is free.
+ console.log('NINFA Remotion: reserved separate render port '+renderPort+' (Studio may remain open).');
+ const render=spawnSync(binary,['render',join(app,'src/index.ts'),compositions[kind],out,'--props='+propFile,'--codec=h264','--concurrency=2','--port='+renderPort],{cwd:app,stdio:'inherit',timeout:900000,shell:process.platform==='win32'});
  if(render.error||render.status!==0)throw new Error('RENDER_FAILED: '+(render.error?.message||render.status));
  const elapsed_ms=Math.round(performance.now()-started);
  const probe=spawnSync('ffprobe',['-v','error','-count_frames','-show_entries','stream=codec_type,codec_name,width,height,nb_read_frames,r_frame_rate','-of','json',out],{encoding:'utf8'});

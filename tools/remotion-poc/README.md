@@ -30,6 +30,21 @@ node scripts/render.mjs automation /tmp/ninfa-remotion/automation.mp4
 
 Windows example output: `C:\\NINFA-Review\\cache.mp4`. Do not upload owner voice, review masters or heavy media to Git. **Audit and commit a pinned package-lock.json on the host** after dependency and license review, before any production adoption.
 
+## Fix: render CLI sees the Studio startup page on localhost:3000
+
+When Studio is running on port 3000, Remotion CLI might accidentally hit
+its HTML startup page instead of its own bundled rendering server, raising
+`window.getStaticCompositions is undefined`. The render wrapper now
+**reserves a distinct ephemeral TCP port from the operating system** and
+passes it to Remotion as `--port=<number>`. This is independent of the
+Studio URL; Studio may remain open during renders.
+
+After updating this branch, rerun `npm test` and `npm run typecheck`;
+then execute the three `node scripts/render.mjs ...` commands again.
+You do **not** need to reinstall packages or Chrome. If another server
+races to occupy the selected port, retry once, or stop Studio with Ctrl+C
+and rerun. No render success is asserted until MP4 and ffprobe receipt exist.
+
 ## Truth modes
 
 | Scene | Evidence source | Cannot imply |

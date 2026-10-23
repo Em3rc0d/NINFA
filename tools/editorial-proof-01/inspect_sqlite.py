@@ -11,6 +11,7 @@ import hashlib
 import json
 from pathlib import Path
 import sqlite3
+from contextlib import closing
 import sys
 import time
 
@@ -37,8 +38,9 @@ def verify_receipt(folder: Path) -> dict:
 
 
 def inspect_db(path: Path, guarded: bool) -> tuple[list[tuple[int, str, str]], list[tuple]]:
-    # file URI with mode=ro prevents any mutation of source SQLite databases.
-    with sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True) as con:
+    # file URI with mode=ro prevents writes. closing() releases Windows file handles.
+    # sqlite3.Connection's own context manager only commits/rolls back; it does not close.
+    with closing(sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True)) as con:
         rows = con.execute("SELECT id, event_key, note FROM actions ORDER BY id").fetchall()
         indexes = con.execute("PRAGMA index_list('actions')").fetchall()
         index_defs = con.execute("SELECT name, sql FROM sqlite_master WHERE type='index'").fetchall()

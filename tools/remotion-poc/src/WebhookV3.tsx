@@ -31,7 +31,7 @@ const EventToken:React.FC<{x:number;y:number;index:number;accent:string;opacity?
  <g opacity={opacity} transform={'translate('+x+','+y+')'}>
   <circle r="45" fill={P.panel} stroke={accent} strokeWidth="7"/>
   <circle r="15" fill={accent}/>
-  <text x="0" y="77" fill={P.ink} fontSize="27" fontFamily={mono} textAnchor="middle">{'DELIVERY '+index}</text>
+  <text x="0" y="77" fill={P.ink} fontSize="32" fontFamily={mono} textAnchor="middle">{'DELIVERY '+index}</text>
  </g>;
 const EventLane:React.FC<{t:number;guarded:boolean}>=({t,guarded})=>{
  const one=progress(t,9,47),two=progress(t,74,47);
@@ -58,8 +58,8 @@ const EventLane:React.FC<{t:number;guarded:boolean}>=({t,guarded})=>{
   <div style={{position:'absolute',left:622,top:72,width:270,height:398,padding:23,background:P.panel,borderRadius:20,border:'2px solid '+P.line,boxSizing:'border-box'}}>
    <div style={{color:P.muted,fontSize:28,fontFamily:mono}}>SQLite rows</div>
    <div style={{marginTop:21,fontSize:26,fontFamily:mono,color:P.faint}}>event_key</div>
-   {(one>=1)&&<div style={{marginTop:23,padding:'13px 10px',background:'#25463c',borderLeft:'7px solid '+P.green,fontSize:24,fontFamily:mono}}>evt_local_001</div>}
-   {(two>=1&&!guarded)&&<div style={{marginTop:15,padding:'13px 10px',background:'#52322e',borderLeft:'7px solid '+P.red,fontSize:24,fontFamily:mono}}>evt_local_001</div>}
+   {(one>=1)&&<div style={{marginTop:23,padding:'13px 10px',background:'#25463c',borderLeft:'7px solid '+P.green,fontSize:29,fontFamily:mono}}>evt_local_001</div>}
+   {(two>=1&&!guarded)&&<div style={{marginTop:15,padding:'13px 10px',background:'#52322e',borderLeft:'7px solid '+P.red,fontSize:29,fontFamily:mono}}>evt_local_001</div>}
    {(two>=1&&guarded)&&<div style={{marginTop:15,fontSize:25,fontWeight:800,color:P.red}}>DUPLICATE<br/>IGNORED</div>}
   </div>
  </div>;
@@ -155,7 +155,7 @@ export const WebhookV3:React.FC<Props>=(props)=>{
   <div style={{position:'absolute',top:343,left:85,width:910,height:1010}}>
    <Content t={frame-shot.start} props={props}/>
   </div>
-  <div style={{position:'absolute',left:85,top:1326,right:85,borderTop:'2px solid '+P.line,paddingTop:21}}>
+  <div style={{position:'absolute',left:85,top:1304,right:85,borderTop:'2px solid '+P.line,paddingTop:21}}>
    <div style={{fontSize:30,fontWeight:700,color:P.muted}}>NINFA Motion v1.5 · sequential local SQLite evidence</div>
    <div style={{fontSize:26,color:P.muted,marginTop:12}}>{props.disclosure}</div>
    <div style={{fontSize:25,color:P.cyan,marginTop:14,fontFamily:mono}}>ILLUSTRATIVE REPLAY · REVIEW ONLY · NO OFFICIAL LOGO</div>

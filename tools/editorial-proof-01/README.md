@@ -109,35 +109,34 @@ Recording the fresh live operations (4 attempts, separate connections) gives evi
 Do not claim provider delivery, concurrency safety, exactly-once production behavior or complete professional edit. Passing tests is the source-footage gate, not editorial acceptance.
 
 
-## Natural English narration when the original approved voice file is unavailable
+## Natural English narration with the owner's EXISTING Kokoro (am_adam)
 
-The owner confirmed that the historical approved M4A/WAV is **not available**. **Do not ask for it again**, and do not default to eSpeak. The existing NINFA Chatterbox Multilingual UI explicitly requires a voice-reference audio or video file, making it unsuitable *without collecting a new reference recording*.
+Owner confirmed that a working Kokoro project is **already installed locally in Windows** at
+`C:\Users\eduar\Desktop\ai-integrations\kokoro`, and that the established preferred voice is **`am_adam`**. That project previously used `KPipeline(lang_code="a")` and the local voice at approximately `speed=0.96` with 24 kHz PCM WAV export. It already has project scripts such as `generate_narration.py` and `GENERATE_NARRATION.bat`. **Do not ask the owner to recover the unavailable old voice file, create a second virtualenv, reinstall Kokoro or run the WSL installer.**
 
-A **separate reference-free voice audition** is prepared in `voice_ab_kokoro.py` using official [hexgrad/Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) preset English voices `am_michael` and `af_heart`, both running against the same fact-bounded English excerpt. Kokoro model weights are offered under Apache 2.0; inspect all runtime/dependency licenses for commercial packaging and model cache usage before any release. **Downloading model weights the first time requires internet access** even though generation thereafter is local. No paid speech API or GitHub Actions are required.
+For this specific experiment, the included `voice_ab_kokoro.py` file is legacy-named but has been reduced to a **single am_adam narration audition** at speed 0.96; it is not a two-voice A/B test anymore. It preserves the experimentally justified 2-vs-1 synthetic sequential script and explicitly states that concurrency was not tested. The output is a review-only local WAV and provenance JSON receipt. It is not guaranteed natural until the owner listens.
 
-Recommended **separate WSL Ubuntu/Debian Python 3.11/3.12 virtual environment** (don't install into the owner's Windows Python 3.14 or Chatterbox Docker environment):
+Use PowerShell, from the NINFA repository root:
 
-```bash
-cd /mnt/c/Users/eduar/Desktop/Farid/NINFA
-python3 --version                  # use Python 3.11 or 3.12
-python3 -m venv "$HOME/.venvs/ninfa-kokoro"
-source "$HOME/.venvs/ninfa-kokoro/bin/activate"
-sudo apt-get update
-sudo apt-get install -y espeak-ng
-python -m pip install --upgrade pip
-python -m pip install 'kokoro>=0.9.2' soundfile
+```powershell
+cd "C:\Users\eduar\Desktop\Farid\NINFA"
+git pull --ff-only
 
-out="/mnt/c/Users/eduar/Desktop/Farid/NINFA-Review/voice-ab/kokoro-$(date +%Y%m%d-%H%M%S)"
-python tools/editorial-proof-01/voice_ab_kokoro.py --out "$out" --dry-run
-python tools/editorial-proof-01/voice_ab_kokoro.py --out "$out"
-```
+$kokoroRoot = "C:\Users\eduar\Desktop\ai-integrations\kokoro"
+$py = Join-Path $kokoroRoot ".venv\Scripts\python.exe"
+if (-not (Test-Path $py)) {
+    $py = Join-Path $kokoroRoot "kokoro-env\Scripts\python.exe"
+}
+if (-not (Test-Path $py)) { throw "Existing Kokoro Python venv not found. Inspect $kokoroRoot before installing anything." }
 
-If WSL's default Python is not 3.11/3.12, choose an existing compatible interpreter for this venv rather than changing the global interpreter. The dry-run needs only the Python standard library. The actual audition creates two WAVs and an `audition.json` in a **new folder outside the repo**. It refuses overwrites. Model weights are downloaded locally on first use. Actual inference success, voice quality, CPU/GPU speed and dependency resolution have **not yet been verified on the owner's host**.
-
-Before running an actual inference, optional standard-library regression checks:
-
-```bash
+& $py -c "from kokoro import KPipeline; import soundfile; print('Kokoro available')"
 python -m unittest discover -s tools/editorial-proof-01 -p "test_voice_ab_kokoro.py" -v
+
+$out = "C:\Users\eduar\Desktop\Farid\NINFA-Review\voice-ab\adam-$(Get-Date -Format yyyyMMdd-HHmmss)"
+& $py tools/editorial-proof-01/voice_ab_kokoro.py --out "$out" --dry-run
+& $py tools/editorial-proof-01/voice_ab_kokoro.py --out "$out"
 ```
 
-**Editorial decision gate:** Listen to the two samples at normal phone volume. If both sound synthetic/robotic, reject the voice path. This is **not** a voice clone and cannot claim to recreate the absent approved voice. Choose a preset only after human acceptance. Do **not** compose another 24s video or rush to final mix before an acceptable narrator and crisp screen footage exist. Avoid publishing the audition or committing WAVs.
+Outputs are `$out\am_adam.wav` and `$out\audition.json`. No WAV, reference voice, private video, or local file paths containing secrets should be committed to the public GitHub repository.
+
+**Owner gate:** listen to `am_adam.wav` at normal volume and approve or reject its **actual** naturalness, cadence and clarity. An earlier positive experience with the voice does not mean this new scripted WAV has been verified. If it sounds good, edit a short evidence-grounded rough cut from the real SQLite capture; **do not add camera shakes, PPT overlays or eSpeak**. The old missing narration will not be requested again. `PUBLISH_AUTHORITY=NONE`, `RELEASE_BLOCKED`.

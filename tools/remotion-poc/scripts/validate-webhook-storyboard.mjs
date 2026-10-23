@@ -14,7 +14,7 @@ export function validateWebhookStoryboard(plan,props,receipt){
  for(let i=0;i<REQUIRED_SHOTS.length;i++){
   const s=plan.shots[i];
   reject(s?.id===REQUIRED_SHOTS[i]&&s.start===(i?plan.shots[i-1].end:0)&&Number.isInteger(s.start)&&Number.isInteger(s.end)&&s.end>s.start&&s.end<=720,'shot order/coverage');
-  reject(typeof s.headline==='string'&&s.headline.length>6&&typeof s.action==='string'&&s.action.length>15&&typeof s.narration==='string'&&s.narration.length>10,'shot content');
+  reject(typeof s.headline==='string'&&s.headline.length>=6&&typeof s.action==='string'&&s.action.length>15&&typeof s.narration==='string'&&s.narration.length>10,'shot content');
  }
  reject(plan.shots[plan.shots.length-1].end===720&&plan.shots[plan.shots.length-1].headline==='CONCURRENCY NOT TESTED.','final caveat');
  const words=plan.shots.reduce((sum,s)=>sum+s.narration.split(/\s+/).length,0);

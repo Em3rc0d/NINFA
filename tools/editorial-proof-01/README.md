@@ -8,38 +8,38 @@ Capture the real terminal inspecting the **actual SQLite databases** and SHA-ver
 
 ## Windows steps after the owner generated the evidence
 
-From the same Windows machine, the folder from \`python tools/motion-v15/replay_lab.py --out "$evidence"\` is already enough. No regeneration is necessary.
+From the same Windows machine, the folder from `python tools/motion-v15/replay_lab.py --out "$evidence"` is already enough. No regeneration is necessary.
 
 1. Fetch this experimental branch separately from main:
 
-\`\`\`powershell
+```powershell
 cd "C:\Users\eduar\Desktop\Farid\NINFA"
 git fetch origin
 git switch --track origin/exp/editorial-proof-01-20261023
-\`\`\`
+```
 
-2. Recover the latest evidence folder **if the \`$evidence\` PowerShell variable is no longer defined**:
+2. Recover the latest evidence folder **if the `$evidence` PowerShell variable is no longer defined**:
 
-\`\`\`powershell
+```powershell
 $evidence = (Get-ChildItem "C:\Users\eduar\Desktop\Farid\NINFA-Review\capture" -Directory -Filter "sqlite-*" |
   Sort-Object LastWriteTime -Descending | Select-Object -First 1).FullName
 if (-not $evidence) { throw "No SQLite evidence folder found" }
-\`\`\`
+```
 
 3. Run tests and a normal read-only inspection:
 
-\`\`\`powershell
+```powershell
 python -m unittest discover -s tools/editorial-proof-01 -p "test_*.py" -v
 python tools/editorial-proof-01/inspect_sqlite.py --evidence "$evidence"
-\`\`\`
+```
 
-4. For actual *footage*, open a **clean Windows Terminal window** with large, legible text. In OBS Studio (or an equivalent local recorder), use **Window Capture** targeting *only that terminal window*. Hide personal data, account details, notification popups, credentials and unrelated windows. Capture to the private sibling directory \`NINFA-Review/capture\`, never into Git. Test 30 FPS at 1080p if available; record without microphone until narration approval. Start recording before running:
+4. For actual *footage*, open a **clean Windows Terminal window** with large, legible text. In OBS Studio (or an equivalent local recorder), use **Window Capture** targeting *only that terminal window*. Hide personal data, account details, notification popups, credentials and unrelated windows. Capture to the private sibling directory `NINFA-Review/capture`, never into Git. Test 30 FPS at 1080p if available; record without microphone until narration approval. Start recording before running:
 
-\`\`\`powershell
+```powershell
 python tools/editorial-proof-01/inspect_sqlite.py --evidence "$evidence" --pause-seconds 4
-\`\`\`
+```
 
-Stop recording after the \`CAPTURE_SOURCE_VERIFIED\` line. The four stages contain source type, actual naive rows, actual guarded index/rows, and bounded conclusion. **The pause is only for human readability during recording; it does not simulate a recorded INSERT operation.**
+Stop recording after the `CAPTURE_SOURCE_VERIFIED` line. The four stages contain source type, actual naive rows, actual guarded index/rows, and bounded conclusion. **The pause is only for human readability during recording; it does not simulate a recorded INSERT operation.**
 
 This is **raw genuine input footage**, not a professional edit by itself. Video capture, source quality, editing and narrator are separate gates; never declare the editorial standard achieved from a test suite or a terminal MP4 alone.
 
@@ -53,26 +53,26 @@ This is **raw genuine input footage**, not a professional edit by itself. Video 
 
 ## Technical implementation
 
-\`inspect_sqlite.py\` uses Python standard library only, reads local SQLite in \`mode=ro\`, validates the canonical content SHA-256 and source limitations, confirms row contents/index and rejects tampering. Unit tests regenerate their own synthetic fixtures in private temp folders then test positive and negative scenarios. None alters the owner's three files.
+`inspect_sqlite.py` uses Python standard library only, reads local SQLite in `mode=ro`, validates the canonical content SHA-256 and source limitations, confirms row contents/index and rejects tampering. Unit tests regenerate their own synthetic fixtures in private temp folders then test positive and negative scenarios. None alters the owner's three files.
 
-\`STATUS: EVIDENCE CAPTURE PREPARED / ORIGINAL FOOTAGE AND VOICE EDIT PENDING / RELEASE_BLOCKED\`
+`STATUS: EVIDENCE CAPTURE PREPARED / ORIGINAL FOOTAGE AND VOICE EDIT PENDING / RELEASE_BLOCKED`
 
 
 ## Windows Python 3.14 file-lock compatibility
 
-On 2026-10-23 the owner's initial \`python -m unittest discover\` execution reported 1 PASS / 3 ERROR, all three errors in \`TemporaryDirectory.cleanup()\` with \`PermissionError: [WinError 32]\` on \`guarded.sqlite\`. Root cause: using \`with sqlite3.connect(...) as con:\` commits/rolls back but **does not close the connection**. Linux tests had not revealed the Windows file handle lock.
+On 2026-10-23 the owner's initial `python -m unittest discover` execution reported 1 PASS / 3 ERROR, all three errors in `TemporaryDirectory.cleanup()` with `PermissionError: [WinError 32]` on `guarded.sqlite`. Root cause: using `with sqlite3.connect(...) as con:` commits/rolls back but **does not close the connection**. Linux tests had not revealed the Windows file handle lock.
 
-The inspector now uses \`contextlib.closing(sqlite3.connect(...))\` for *read-only* database access, and the destructive test fixtures use \`with closing(sqlite3.connect(...)) as con, con:\` to both complete transactions and close resources. An additional regression test checks that connections are closed on both success and policy-blocked validation failures. All source receipts, 2-versus-1 results, immutable evidence, synthetic/sequential scope and publication safeguards remain unchanged.
+The inspector now uses `contextlib.closing(sqlite3.connect(...))` for *read-only* database access, and the destructive test fixtures use `with closing(sqlite3.connect(...)) as con, con:` to both complete transactions and close resources. An additional regression test checks that connections are closed on both success and policy-blocked validation failures. All source receipts, 2-versus-1 results, immutable evidence, synthetic/sequential scope and publication safeguards remain unchanged.
 
-Update the experimental branch and rerun from the **NINFA root directory**, not inside \`tools/editorial-proof-01\`:
+Update the experimental branch and rerun from the **NINFA root directory**, not inside `tools/editorial-proof-01`:
 
-\`\`\`powershell
+```powershell
 cd "C:\Users\eduar\Desktop\Farid\NINFA"
 git pull --ff-only
 python -m unittest discover -s tools/editorial-proof-01 -p "test_*.py" -v
-\`\`\`
+```
 
-**Expected:** 5 tests PASS on Windows Python 3.14. If so, run \`inspect_sqlite.py\` on the existing \`$evidence\` folder as already documented; no regeneration or deletion of the evidence directory is needed. The owner Windows 5/5 result has not yet been observed, even though the close-on-exception mechanism has been smoke-tested locally under Python 3.13. Output remains private and release BLOCKED.
+**Expected:** 5 tests PASS on Windows Python 3.14. If so, run `inspect_sqlite.py` on the existing `$evidence` folder as already documented; no regeneration or deletion of the evidence directory is needed. The owner Windows 5/5 result has not yet been observed, even though the close-on-exception mechanism has been smoke-tested locally under Python 3.13. Output remains private and release BLOCKED.
 
 
 ## Editorial capture update — LIVE sequential INSERT replay

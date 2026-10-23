@@ -48,3 +48,32 @@ The legacy FFmpeg sync option `-vsync` was replaced by the per-output `-fps_mode
 - **Code gate:** Two visual regression checks added; Windows is expected to report **28/28 tests** after pulling this patch, but it has **not** yet been rendered or checked with the corrected source.
 
 **Conclusion:** `FRAME_EXTRACTION_PASS / VISUAL_STILL_QA_PARTIAL_PASS_WITH_CORRECTIONS / PATCH_RE_RENDER_PENDING / RELEASE_BLOCKED`. Retain all prior assets and V1/V2 compositions, no `main` merge and no automatic publication.
+
+## Polished V3 — 19-frame independent static visual audit (2026-10-23)
+
+**Evidence provided by owner:** `frame-000(1).png` through `frame-018(1).png` (19 intact 1080×1920 PNGs), plus `sampling-manifest(1).json`. All 19 files were individually opened/decoded and checked for correct dimensions. Manifest has `frame_count=19`, 7 shot midpoints and the before/after images of exactly 6 cuts (77/78, 209/210, 293/294, 398/399, 551/552, 635/636). `source_video_sha256=8e8b4f76be482a0021ee9a456c6c9f937881b33e935889529829ed72a276a277` is consistent with the prior owner Windows render receipt and extractor output. **The MP4 itself was not uploaded**, so a third-party SHA-256 verification of video bytes and continuous-motion inspection has **not** occurred.
+
+### Verified visual regressions against V3 before patch
+
+| QA issue in prior V3 | Relevant polished shots | Independent still-frame assessment |
+|---|---|---|
+| Compare note crossed shared provenance divider | Frames 552/594/635 (18.4/19.8/21.17s) | **PASS:** text is clearly above divider, no text collision |
+| Partially occluded green SVG endpoint circles | Frames 144/209 and 475/551 | **PASS:** no clipped endpoint circles; persisted rows and guard markers readable |
+| Green check visible before event reaches UNIQUE gate | Frames 399/475 | **PASS:** initial guarded frame has no premature check, later frame shows accepted state |
+| Double-exposed title overlays at scene transitions | All 6 cut pairs | **PASS in sampled images:** each adjacent frame contains the corresponding, mutually exclusive shot title |
+| Grounding and synthetic replay limitation | Seven sampled shot middles and final frame 678 | **PASS as pictured:** two sequential synthetic deliveries, 2 vs 1 actions, and explicit **CONCURRENCY NOT TESTED** limitation. This is not a live provider or production result. |
+
+### Outstanding non-P0 visual/product work (do not conflate stills with release approval)
+
+- **P2 / mobile overlay clearance:** Header's right-aligned shot tag is constrained by `right:85px` in a 1080px composition; project's TikTok right-side safety preference is **120px**, so mark as an unresolved mobile-placement issue. Do not assume mobile platform UI exposes the full right edge.
+- **P2 / mobile readability:** Tiny metadata footer and event-key text are readable at source resolution but not approved on a real phone. Captions must be reserved before final placement, and contrast checked at practical playback size.
+- **P1 / audiovisual completion:** Silent review master, no official approved logo bytes, no recorded narration and no phrase-aligned captions. The debug-only text `REVIEW ONLY · NO OFFICIAL LOGO` and `CAPTIONS RESERVED` must not ship in the public edition.
+- **P1 / timing:** Full 24s video was not independently uploaded/reviewed; 19 source frames cannot certify fluidity, pacing, holds, synchronized sound or frame tearing between sampling points. Separate owner phone QA is required.
+- **P1 / evidence and rights:** `publish_authority=NONE`, rights/license audit and official brand assets remain external; 28/28 Windows tests and the 19-frame extractor success don't change publication authority.
+- No valid Remotion-vs-Pillow performance conclusion from single cold/warm renders.
+
+### Gate outcome
+
+`VISUAL_STATIC_QA_PASS_FOR_POLISHED_19_FRAMES / MOBILE_SAFE_AREA_PENDING / FULL_MOTION_AUDIO_QA_PENDING / RELEASE_BLOCKED`.
+
+**Recommendation:** Treat this one Webhook layout as sufficiently validated for a *finishing experiment*; do not propagate the template to other stories or create V4/V5. Next work should remove review-only overlays, insert approved canonical brand mark, integrate a measured English narration via the existing Motion v1.3 finishing path, align subtitle timings to the real audio, and test on mobile. Keep the original assets immutable and preserve the seven-shot evidence guard. No merger into `main` and no publish until the full audiovisual gate is completed and approved by the owner.

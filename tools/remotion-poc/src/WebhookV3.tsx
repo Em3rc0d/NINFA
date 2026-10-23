@@ -35,7 +35,8 @@ const EventToken:React.FC<{x:number;y:number;index:number;accent:string;opacity?
  </g>;
 const EventLane:React.FC<{t:number;guarded:boolean}>=({t,guarded})=>{
  const one=progress(t,9,47),two=progress(t,74,47);
- const end=guarded?510:635;
+ const acceptedEnd=635;
+ const duplicateEnd=guarded?510:635;
  const dbX=620;
  const y1=175,y2=360;
  return <div style={{position:'absolute',top:282,left:0,width:910,height:660}}>
@@ -48,9 +49,9 @@ const EventLane:React.FC<{t:number;guarded:boolean}>=({t,guarded})=>{
     <text x="530" y="252" fill={P.green} textAnchor="middle" fontSize="43" fontWeight="bold">✓</text>
     <text x="530" y="425" fill={P.red} textAnchor="middle" fontSize="43" fontWeight="bold" opacity={progress(t,119,9)}>×</text>
    </g>}
-   {one<1&&<EventToken x={X(95+(end-95)*one)} y={y1} index={1} accent={P.cyan} opacity={progress(t,0,12)}/>}
-   {two<1&&<EventToken x={X(95+(end-95)*two)} y={y2} index={2} accent={guarded?P.red:P.cyan} opacity={progress(t,65,12)}/>}
-   {one>=1&&<g><circle cx={guarded?510:630} cy={y1} r="32" fill={P.green}/><text x={guarded?510:630} y={y1+12} textAnchor="middle" fill={P.bg} fontWeight="bold" fontSize="41">✓</text></g>}
+   {one<1&&<EventToken x={X(95+(acceptedEnd-95)*one)} y={y1} index={1} accent={P.cyan} opacity={progress(t,0,12)}/>}
+   {two<1&&<EventToken x={X(95+(duplicateEnd-95)*two)} y={y2} index={2} accent={guarded?P.red:P.cyan} opacity={progress(t,65,12)}/>}
+   {one>=1&&<g><circle cx={630} cy={y1} r="32" fill={P.green}/><text x={guarded?510:630} y={y1+12} textAnchor="middle" fill={P.bg} fontWeight="bold" fontSize="41">✓</text></g>}
    {two>=1&&<g><circle cx={guarded?510:630} cy={y2} r="32" fill={guarded?P.red:P.green}/><text x={guarded?510:630} y={y2+12} textAnchor="middle" fill={P.bg} fontWeight="bold" fontSize="41">{guarded?'×':'✓'}</text></g>}
    <text x="90" y="485" fill={P.muted} fontFamily={mono} fontSize="26">SAME KEY · TWO SEQUENTIAL CONNECTIONS</text>
   </svg>

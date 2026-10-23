@@ -37,8 +37,7 @@ const EventLane:React.FC<{t:number;guarded:boolean}>=({t,guarded})=>{
  const one=progress(t,9,47),two=progress(t,74,47);
  const acceptedEnd=635;
  const duplicateEnd=guarded?510:635;
- const dbX=620;
- const y1=175,y2=360;
+  const y1=175,y2=360;
  return <div style={{position:'absolute',top:282,left:0,width:910,height:660}}>
   <svg width="910" height="515" viewBox="0 0 910 515" aria-label="Illustrative sequential event flow">
    <line x1="95" x2="665" y1={y1} y2={y1} stroke={P.line} strokeWidth="5" strokeDasharray="11 13"/>
@@ -46,13 +45,12 @@ const EventLane:React.FC<{t:number;guarded:boolean}>=({t,guarded})=>{
    {guarded&&<g>
     <rect x="465" y="103" width="130" height="332" rx="25" fill={P.panel} stroke={P.cyan} strokeWidth="4"/>
     <text x="530" y="80" fill={P.cyan} textAnchor="middle" fontSize="28" fontFamily={mono}>UNIQUE</text>
-    <text x="530" y="252" fill={P.green} textAnchor="middle" fontSize="43" fontWeight="bold">✓</text>
+    <text x="530" y="252" fill={P.green} textAnchor="middle" fontSize="43" fontWeight="bold" opacity={progress(t,42,10)}>✓</text>
     <text x="530" y="425" fill={P.red} textAnchor="middle" fontSize="43" fontWeight="bold" opacity={progress(t,119,9)}>×</text>
    </g>}
    {one<1&&<EventToken x={X(95+(acceptedEnd-95)*one)} y={y1} index={1} accent={P.cyan} opacity={progress(t,0,12)}/>}
    {two<1&&<EventToken x={X(95+(duplicateEnd-95)*two)} y={y2} index={2} accent={guarded?P.red:P.cyan} opacity={progress(t,65,12)}/>}
-   {one>=1&&<g><circle cx={630} cy={y1} r="32" fill={P.green}/><text x={guarded?510:630} y={y1+12} textAnchor="middle" fill={P.bg} fontWeight="bold" fontSize="41">✓</text></g>}
-   {two>=1&&<g><circle cx={guarded?510:630} cy={y2} r="32" fill={guarded?P.red:P.green}/><text x={guarded?510:630} y={y2+12} textAnchor="middle" fill={P.bg} fontWeight="bold" fontSize="41">{guarded?'×':'✓'}</text></g>}
+   {/* Persisted rows and the gated status symbols are the only accepted/rejected indicators. */}
    <text x="90" y="485" fill={P.muted} fontFamily={mono} fontSize="26">SAME KEY · TWO SEQUENTIAL CONNECTIONS</text>
   </svg>
   <div style={{position:'absolute',left:622,top:72,width:270,height:398,padding:23,background:P.panel,borderRadius:20,border:'2px solid '+P.line,boxSizing:'border-box'}}>
@@ -125,7 +123,7 @@ const Compare:React.FC<FrameShotProps>=({t,props})=><>
    <div style={{height:19,width:150,background:P.green,marginTop:20,borderRadius:9}}/>
   </div>
  </div>
- <div style={{position:'absolute',top:930,fontSize:35,color:P.ink}}>Synthetic sequential SQLite result.</div>
+ <div style={{position:'absolute',top:855,fontSize:35,color:P.ink}}>Synthetic sequential SQLite result.</div>
  </>;
 const Limitation:React.FC<FrameShotProps>=({t})=><>
  <Head kicker="07 / EXPERIMENT LIMIT" title={'CONCURRENCY\nNOT TESTED.'} detail="This demonstrates sequential SQLite behavior only."/>

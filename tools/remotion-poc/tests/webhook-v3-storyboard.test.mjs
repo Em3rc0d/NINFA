@@ -77,3 +77,20 @@ test('reject incomplete, repeated or unordered frame selections',()=>{
  assert.throws(()=>buildFrameExtractionCommand('a','b',frames.slice(0,-1)),/POLICY_BLOCKED/);
  assert.throws(()=>buildFrameExtractionCommand('a','b',[...frames.slice(0,18),frames[0]]),/POLICY_BLOCKED/);
 });
+
+test('V3 visual regression: no partially occluded circle status at DB boundary',()=>{
+ const source=readFileSync(resolve(repo,'tools/remotion-poc/src/WebhookV3.tsx'),'utf8');
+ assert.doesNotMatch(source,/circle cx=\{630\} cy=\{y1\} r="32"/);
+ assert.doesNotMatch(source,/circle cx=\{guarded\?510:630\} cy=\{y2\} r="32"/);
+ assert.match(source,/opacity=\{progress\(t,42,10\)\}/);
+ assert.match(source,/acceptedEnd=635/);
+ assert.match(source,/duplicateEnd=guarded\?510:635/);
+});
+test('V3 comparison note ends before shared provenance footer',()=>{
+ const source=readFileSync(resolve(repo,'tools/remotion-poc/src/WebhookV3.tsx'),'utf8');
+ const innerY=Number(source.match(/top:(\d+),fontSize:35,color:P\.ink/)[1]);
+ const shotY=Number(source.match(/top:(\d+),left:85,width:910,height:1010/)[1]);
+ const footerY=Number(source.match(/left:85,top:(\d+),right:85,borderTop/)[1]);
+ assert.ok(shotY+innerY+44<=footerY-24,
+  'comparison text must leave at least 24px clear above source divider');
+});

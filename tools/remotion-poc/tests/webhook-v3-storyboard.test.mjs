@@ -68,7 +68,7 @@ test('frame sampling uses modern FFmpeg fps_mode vfr and no removed vsync',()=>{
  const frames=sampleFrames();
  const cmd=buildFrameExtractionCommand('C:\\test\\video.mp4','C:\\test\\frames\\frame-%03d.png',frames);
  assert.equal(cmd.executable,'ffmpeg');
- assert.deepEqual(cmd.args.slice(-8),['-fps_mode','vfr','-start_number','0','-frames:v','19','C:\\test\\frames\\frame-%03d.png'].slice(-8));
+ assert.deepEqual(cmd.args.slice(-7),['-fps_mode','vfr','-start_number','0','-frames:v','19','C:\\test\\frames\\frame-%03d.png']);
  assert.ok(!cmd.args.includes('-vsync'));
  assert.equal(cmd.args[cmd.args.indexOf('-vf')+1].split('+').length,19);
 });

@@ -1,6 +1,6 @@
 # NINFA / Remotion: local POC v0.1
 
-**Status: engineering scaffold; real Remotion rendering NOT YET VERIFIED; media release BLOCKED.**
+**Status: 3/3 WINDOWS RENDER TECHNICAL PASS REPORTED; VISUAL/MOBILE QA + BENCHMARK PENDING; RELEASE BLOCKED.**
 
 This isolated tool is an optional **silent visual** experiment. It does not replace the existing Python/Pillow Motion v1.4/v1.5, v1.3 FFmpeg voice/caption finisher, long-form production, content research or YouTube operations.
 
@@ -13,7 +13,7 @@ This isolated tool is an optional **silent visual** experiment. It does not repl
 
 ## Installation & testing
 
-Node 20+ and FFmpeg/FFprobe installed. A networked machine is needed to install dependencies; this current ChatGPT execution host cannot fetch npm packages, so the MP4 outputs have not been produced or seen.
+Node 20+ and FFmpeg/FFprobe installed. The owner's Windows host successfully completed three CLI renders with H264/ffprobe receipts on 2026-10-23 (see [Windows evidence record](../../docs/contracts/decisions/REMOTION_WINDOWS_RENDER_UAT_2026-10-23.md)). The final MP4 bytes have not been independently inspected. Install dependencies only on a trusted networked host.
 
 ```bash
 cd tools/remotion-poc
@@ -62,6 +62,12 @@ Baseline `cache`: run `python tools/motion-v14/engine.py --manifest tools/motion
 Baseline `webhook`: run `python tools/motion-v15/build.py --out /absolute/private/baseline-webhook` (silent scene 24s) at root.
 
 Compare equivalent duration/size/fps on identical local hardware with three cold and three warm trials each; record Node/Python/FFmpeg versions, CPU/RAM, median wall time, frame count, media bytes and rendered-image legibility. **Automation has no like-for-like baseline; no renderer-speed ratio is valid.** Test visual originality, safe areas on real mobile, factual accuracy, source rights, and audio compatibility with v1.3 independently.
+
+## Windows 2026-10-23 validation and Node 24 hardening
+
+After the Studio/:3000 conflict was fixed, the owner reported **10/10 tests, TypeScript typecheck, and three technical MP4 renders** on Windows. The renderer's H264 / FPS / frame-count receipts are recorded in [the Windows evidence record](../../docs/contracts/decisions/REMOTION_WINDOWS_RENDER_UAT_2026-10-23.md). Visual review has not been performed here.
+
+Node 24 emitted `DEP0190` due to the Windows shell wrapper. We now execute the installed Remotion CLI JavaScript entrypoint directly through `process.execPath` with `shell:false`. The separate-port logic remains unchanged. This security hardening needs retesting on Windows with a **fresh output filename**: the CLI intentionally refuses to overwrite existing videos. A clean `npm test` should report **13 tests**, including 3 additional command tests.
 
 ## Go/no-go
 

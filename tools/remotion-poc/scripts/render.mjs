@@ -7,6 +7,7 @@ import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {performance} from 'node:perf_hooks';
 import {chooseAvailablePort} from './render-port.mjs';
+import {buildRenderCommand} from './render-command.mjs';
 
 const app=resolve(dirname(fileURLToPath(import.meta.url)),'..'),root=resolve(app,'../..');
 const [kind,outArg]=process.argv.slice(2);
@@ -19,8 +20,8 @@ if(out.startsWith(root+sep))throw new Error('POLICY_BLOCKED: media output inside
 if(existsSync(out))throw new Error('POLICY_BLOCKED: output already exists; choose a fresh name');
 const props=load(kind);
 if(props.releaseState!=='BLOCKED'||props.reviewOnly!==true)throw new Error('POLICY_BLOCKED: release authority');
-const binary=join(app,'node_modules','.bin',process.platform==='win32'?'remotion.cmd':'remotion');
-if(!existsSync(binary))throw new Error('Remotion packages not installed locally. Run npm install in tools/remotion-poc.');
+const cliEntry=join(app,'node_modules','@remotion','cli','remotion-cli.js');
+if(!existsSync(cliEntry))throw new Error('Remotion CLI not installed locally. Run npm install in tools/remotion-poc.');
 mkdirSync(dirname(out),{recursive:true});
 const tmp=mkdtempSync(join(tmpdir(),'ninfa-remotion-'));
 try{
@@ -29,8 +30,9 @@ try{
  const renderPort=await chooseAvailablePort();
  // Explicitly isolate the rendering server from a running Remotion Studio (usually :3000).
  // This port is allocated by the OS; never assume Studio is stopped or 3001 is free.
- console.log('NINFA Remotion: reserved separate render port '+renderPort+' (Studio may remain open).');
- const render=spawnSync(binary,['render',join(app,'src/index.ts'),compositions[kind],out,'--props='+propFile,'--codec=h264','--concurrency=2','--port='+renderPort],{cwd:app,stdio:'inherit',timeout:900000,shell:process.platform==='win32'});
+ console.log('NINFA Remotion: selected separate render port '+renderPort+' (Studio may remain open).');
+ const command=buildRenderCommand({app,composition:compositions[kind],output:out,propsFile:propFile,port:renderPort});
+ const render=spawnSync(command.executable,command.args,command.options);
  if(render.error||render.status!==0)throw new Error('RENDER_FAILED: '+(render.error?.message||render.status));
  const elapsed_ms=Math.round(performance.now()-started);
  const probe=spawnSync('ffprobe',['-v','error','-count_frames','-show_entries','stream=codec_type,codec_name,width,height,nb_read_frames,r_frame_rate','-of','json',out],{encoding:'utf8'});

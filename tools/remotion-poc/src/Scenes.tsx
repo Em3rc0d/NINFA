@@ -1,0 +1,20 @@
+import React from 'react';
+import {AbsoluteFill,useCurrentFrame,interpolate} from 'remotion';
+export type Props={kind:'cache'|'webhook'|'automation';channel:string;language:string;reviewOnly:true;releaseState:'BLOCKED';safeZone:{top:number;bottom:number;side:number};title:string;subtitle:string;source:string;disclosure:string;metrics:string[];labels:string[]};
+const colors={bg:'#111920',panel:'#1d2c37',text:'#f5f8fb',muted:'#b4cbd7',cyan:'#44c6f4',green:'#8be3cf',red:'#f28a84'};
+const ramp=(f:number,start:number,duration=24)=>interpolate(f,[start,start+duration],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
+const BigPanel:React.FC<{label:string;value:string;progress:number;accent:string}>=({label,value,progress,accent})=><div style={{background:colors.panel,borderRadius:24,padding:40,marginTop:35,opacity:progress,transform:`translateY(${24*(1-progress)}px)`}}><div style={{fontSize:31,letterSpacing:2,color:colors.muted}}>{label}</div><div style={{fontSize:81,fontWeight:900,marginTop:18,color:accent}}>{value}</div></div>;
+const Cache:React.FC<{p:Props;f:number}>=({p,f})=><div style={{marginTop:115}}><div style={{fontSize:36,color:colors.muted}}>SAME INPUT · REUSED CLEAN VISUAL</div><div style={{display:'flex',gap:30,alignItems:'flex-end',height:355}}>{[4.8,1.15].map((v,i)=><div key={i} style={{flex:1}}><div style={{height:Math.max(2,v/4.8*220*ramp(f,20+i*52)),background:i?colors.green:colors.cyan,borderRadius:15}}/><div style={{fontSize:31,marginTop:22}}>{p.labels[i]}</div><div style={{fontSize:54,fontWeight:900}}>{p.metrics[i]}</div></div>)}</div><div style={{marginTop:95,fontSize:42,color:colors.cyan,opacity:ramp(f,119)}}>CACHE HIT AVOIDS RE-ENCODING</div></div>;
+const Webhook:React.FC<{p:Props;f:number}>=({p,f})=><div style={{marginTop:80}}><div style={{fontSize:36,color:colors.muted}}>SAME EVENT DELIVERED TWICE</div><BigPanel label={p.labels[0]} value={p.metrics[0]} accent={colors.red} progress={ramp(f,28,35)}/><div style={{fontSize:52,color:colors.cyan,textAlign:'center',margin:'54px 0',opacity:ramp(f,260)}}>↓ UNIQUE(event_key) ↓</div><BigPanel label={p.labels[1]} value={p.metrics[1]} accent={colors.green} progress={ramp(f,443,35)}/><div style={{marginTop:42,fontSize:35,color:colors.red}}>SEQUENTIAL ONLY · NO CONCURRENCY PROOF</div></div>;
+const Automation:React.FC<{p:Props;f:number}>=({p,f})=><div style={{marginTop:80}}><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>{[['SALESFORCE',true],['CALENDAR',true],['CALENDLY',false],['ZOOM',false],['DOCUSIGN',false],['PROPOSAL',false]].map(([s,ok],i)=><div key={String(s)} style={{background:colors.panel,borderRadius:16,padding:25,opacity:ramp(f,18+i*17)}}><div style={{fontSize:27,color:colors.muted}}>{s}</div><div style={{fontSize:43,marginTop:24,color:ok?colors.green:colors.red}}>{ok?'PASS':'FAIL'}</div></div>)}</div><div style={{fontSize:102,fontWeight:900,marginTop:46,opacity:ramp(f,122)}}>{p.metrics[0]}</div><div style={{fontSize:34,color:colors.muted}}>BENCHMARK ASSERTIONS PASSED · 29 CALLS</div></div>;
+export const Scene:React.FC<Props>=(p)=>{
+ const f=useCurrentFrame();
+ return <AbsoluteFill style={{background:colors.bg,color:colors.text,fontFamily:'Arial, sans-serif',boxSizing:'border-box',paddingTop:p.safeZone.top,paddingBottom:p.safeZone.bottom,paddingLeft:p.safeZone.side,paddingRight:p.safeZone.side}}>
+ <div style={{fontSize:28,letterSpacing:3,fontWeight:700,color:colors.cyan}}>{p.subtitle}</div>
+ <div style={{fontSize:75,fontWeight:900,marginTop:30,lineHeight:1.10}}>{p.title}</div>
+ {p.kind==='cache'?<Cache p={p} f={f}/>:p.kind==='webhook'?<Webhook p={p} f={f}/>:<Automation p={p} f={f}/>}
+ <div style={{position:'absolute',bottom:p.safeZone.bottom+16,left:p.safeZone.side,right:p.safeZone.side,borderTop:'2px solid #35566b',paddingTop:22,fontSize:24,color:colors.muted}}>
+ <div>{p.source}</div><div style={{marginTop:12}}>{p.disclosure}</div>
+ <div style={{marginTop:20,color:colors.cyan}}>DOES IT AUTOMATE? · REVIEW ONLY · NO CANONICAL LOGO</div></div>
+ </AbsoluteFill>;
+};

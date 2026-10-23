@@ -66,7 +66,7 @@ const EventLane:React.FC<{t:number;guarded:boolean}>=({t,guarded})=>{
 const Hook:React.FC<FrameShotProps>=({t})=>{
  const a=progress(t,8,33),b=progress(t,34,33);
  return <>
-  <Head kicker="01 / EVENT REPLAY" title="ONE EVENT.\nTWO DELIVERIES." detail="The same synthetic key arrives twice."/>
+  <Head kicker="01 / EVENT REPLAY" title={'ONE EVENT.\nTWO DELIVERIES.'} detail="The same synthetic key arrives twice."/>
   <div style={{position:'absolute',top:330,left:0,right:0,height:480}}>
    <svg viewBox="0 0 910 480" width="910" height="480">
     <path d="M 105 145 L 805 145 M 105 325 L 805 325" stroke={P.line} strokeWidth="6" strokeDasharray="11 12"/>
@@ -78,11 +78,11 @@ const Hook:React.FC<FrameShotProps>=({t})=>{
  </>;
 };
 const Naive:React.FC<FrameShotProps>=({t})=><>
- <Head kicker="02 / WITHOUT DATABASE GUARD" title="BOTH WRITES\nSUCCEED." detail="Two successive deliveries. Two saved rows."/>
+ <Head kicker="02 / WITHOUT DATABASE GUARD" title={'BOTH WRITES\nSUCCEED.'} detail="Two successive deliveries. Two saved rows."/>
  <EventLane t={t} guarded={false}/>
  </>;
 const NaiveResult:React.FC<FrameShotProps>=({t,props})=><>
- <Head kicker="03 / UNGUARDED RESULT" title="ONE KEY.\nTWO ACTIONS." detail="No unique constraint in this local test."/>
+ <Head kicker="03 / UNGUARDED RESULT" title={'ONE KEY.\nTWO ACTIONS.'} detail="No unique constraint in this local test."/>
  <div style={{position:'absolute',top:345,left:40,width:830}}>
   <div style={{color:P.red,fontSize:177,fontWeight:900,lineHeight:1,letterSpacing:-8}}>{props.metrics[0].slice(0,1)}</div>
   <div style={{height:9,width:750,background:P.red,marginTop:24,transform:'scaleX('+progress(t,9,22)+')',transformOrigin:'left'}}/>
@@ -92,7 +92,7 @@ const NaiveResult:React.FC<FrameShotProps>=({t,props})=><>
 const Constraint:React.FC<FrameShotProps>=({t})=>{
  const reveal=progress(t,5,30),scan=progress(t,32,45);
  return <>
-  <Head kicker="04 / DATABASE CONSTRAINT" title="ADD A\nUNIQUE KEY." detail="Only one row can use this event key."/>
+  <Head kicker="04 / DATABASE CONSTRAINT" title={'ADD A\nUNIQUE KEY.'} detail="Only one row can use this event key."/>
   <div style={{position:'absolute',top:360,width:910}}>
    <div style={{background:P.panel,border:'2px solid '+P.cyan,borderRadius:28,padding:'55px 35px',fontFamily:mono}}>
     <div style={{color:P.muted,fontSize:30}}>SQLITE / UNIQUE INDEX</div>
@@ -104,11 +104,11 @@ const Constraint:React.FC<FrameShotProps>=({t})=>{
  </>;
 };
 const Guarded:React.FC<FrameShotProps>=({t})=><>
- <Head kicker="05 / WITH UNIQUE(event_key)" title="FIRST IN.\nSECOND STOPPED." detail="Same event replayed sequentially."/>
+ <Head kicker="05 / WITH UNIQUE(event_key)" title={'FIRST IN.\nSECOND STOPPED.'} detail="Same event replayed sequentially."/>
  <EventLane t={t} guarded/>
  </>;
 const Compare:React.FC<FrameShotProps>=({t,props})=><>
- <Head kicker="06 / RECORDED LOCAL COUNTS" title="SAME EVENT.\nDIFFERENT RESULT."/>
+ <Head kicker="06 / RECORDED LOCAL COUNTS" title={'SAME EVENT.\nDIFFERENT RESULT.'}/>
  <div style={{position:'absolute',top:375,left:0,right:0,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
   <div style={{width:350,opacity:progress(t,5,12)}}>
    <div style={{fontSize:31,color:P.muted,fontFamily:mono}}>NO UNIQUE KEY</div>
@@ -127,7 +127,7 @@ const Compare:React.FC<FrameShotProps>=({t,props})=><>
  <div style={{position:'absolute',top:930,fontSize:35,color:P.ink}}>Synthetic sequential SQLite result.</div>
  </>;
 const Limitation:React.FC<FrameShotProps>=({t})=><>
- <Head kicker="07 / EXPERIMENT LIMIT" title="CONCURRENCY\nNOT TESTED." detail="This demonstrates sequential SQLite behavior only."/>
+ <Head kicker="07 / EXPERIMENT LIMIT" title={'CONCURRENCY\nNOT TESTED.'} detail="This demonstrates sequential SQLite behavior only."/>
  <div style={{position:'absolute',top:405,left:0,right:0}}>
   <div style={{height:12,background:P.red,width:850*progress(t,3,12),marginBottom:65}}/>
   <div style={{fontSize:44,fontWeight:900,color:P.yellow}}>NOT A LIVE WEBHOOK TEST.</div>

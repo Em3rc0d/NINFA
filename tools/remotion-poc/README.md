@@ -67,7 +67,7 @@ Compare equivalent duration/size/fps on identical local hardware with three cold
 
 After the Studio/:3000 conflict was fixed, the owner reported **10/10 tests, TypeScript typecheck, and three technical MP4 renders** on Windows. The renderer's H264 / FPS / frame-count receipts are recorded in [the Windows evidence record](../../docs/contracts/decisions/REMOTION_WINDOWS_RENDER_UAT_2026-10-23.md). Visual review has not been performed here.
 
-Node 24 emitted `DEP0190` due to the Windows shell wrapper. We now execute the installed Remotion CLI JavaScript entrypoint directly through `process.execPath` with `shell:false`. The separate-port logic remains unchanged. This security hardening needs retesting on Windows with a **fresh output filename**: the CLI intentionally refuses to overwrite existing videos. A clean `npm test` should report **13 tests**, including 3 additional command tests.
+Node 24 emitted `DEP0190` due to the Windows shell wrapper. We now execute the installed Remotion CLI JavaScript entrypoint directly through `process.execPath` with `shell:false`. The separate-port logic remains unchanged. The owner subsequently confirmed **13/13 tests PASS**, TypeScript typecheck PASS and a full hardened CacheRace MP4 render on Windows Node 24.11.1 with no DEP0190 warning (commit `f5606c2`). Its SHA-256 matches the pre-hardening render. The remaining gates concern visual QA, Pillow comparisons, v1.3 finishing, dependency/rights review and release authority.
 
 ## Go/no-go
 

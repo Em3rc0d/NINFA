@@ -3,7 +3,7 @@
 **Observation date:** 2026-10-23 (America/Lima)
 **Environment:** Windows PowerShell, Node.js v24.11.1, pinned Remotion 4.0.538
 **Commit under test:** `03ea083be017ab2dbfa56b550a9920febb276e07` on `exp/remotion-local-poc-20261023`
-**Status:** `WINDOWS_TECHNICAL_RENDER_PASS_REPORTED / DIRECT_MEDIA_REVIEW_PENDING / RELEASE_BLOCKED`
+**Status:** `WINDOWS_TECHNICAL_RENDER_AND_NODE24_HARDENING_PASS_REPORTED / DIRECT_MEDIA_REVIEW_PENDING / RELEASE_BLOCKED`
 
 ## Console evidence
 
@@ -25,7 +25,28 @@ The script validates H.264, 1080×1920, 30 FPS, exact frame count and no unexpec
 
 ## Node 24 warning
 
-All 3 runs emitted `[DEP0190]`: using `spawnSync` with the Windows `.cmd` shim and `shell:true` concatenates unescaped arguments. Subsequent hardening invokes the installed `@remotion/cli/remotion-cli.js` directly via `process.execPath`, with `shell:false`. The hardening's isolated helper tests passed locally in a Node 22 sandbox; the updated render itself must still be tested on the owner's Windows host.
+All 3 runs emitted `[DEP0190]`: using `spawnSync` with the Windows `.cmd` shim and `shell:true` concatenates unescaped arguments. Subsequent hardening invokes the installed `@remotion/cli/remotion-cli.js` directly via `process.execPath`, with `shell:false`. The hardening passed its new regression checks and a real cache re-render on the owner's Windows Node.js 24.11.1 host, without a DEP0190 warning in the supplied transcript.
+
+## Windows Node 24 hardening retest — 2026-10-23
+
+**Commit actually tested:** `f5606c2ee304f89e98345bdf5be40eacc3108d94`. After `git pull --ff-only` from `03ea083` to `f5606c2`:
+
+- `npm test`: **13 passed / 0 failed**, including direct Node launch, rejecting invalid composition/port, and isolated-port behavior.
+- `npm run typecheck`: **PASS** (no output/errors).
+- `node scripts/render.mjs cache ".../renders/cache-hardened.mp4"`: **PASS**, using an isolated dynamic port `65045`, H.264, 1080 × 1920, 30 fps, 180 frames, silently rendered.
+- Total `elapsed_ms: 18632`; video approx. `126.3 kB`; props SHA matches the prior CacheRace run.
+- Hardening run MP4 SHA: `d7acce60a668accdd40e532a76e51fd233d7cf7bfc140df8fc82fd3144832f5e`, **the same** as the pre-hardening run at `03ea083`. This is evidence of identical encoded output in the supplied receipts; the MP4 bytes themselves were not uploaded for independent hashing.
+- The transcript shows **no `[DEP0190]` warning** on the hardened run. This validates the mitigation in this Windows test; it is not a general proof about all environments.
+- Difference between original 14,550 ms and hardened 18,632 ms does **not** establish a performance regression: single runs, different state/load, no same-host matched repeated sample.
+
+**Current technical gate:** `NODE24_HARDENING_PASS_REPORTED`. New media was still not directly uploaded for visual inspection. The prior webhook and automation media were generated using the original launcher; their rendering had already passed structural QA, but they were not rerun with the hardened script (unnecessary for this narrow launch-security check).
+
+### Still required before production adapter adoption
+
+1. Inspect real `cache.mp4`, `webhook.mp4` and `automation.mp4` visually (or contact sheets/video snippets), including first/last frames and transitions, accurate benchmark attribution, legible factual caveats, safe areas on a physical device, contrast and original composition.
+2. Run representative Pillow/FFmpeg baselines with a fair repeated protocol on the same Windows host.
+3. Test a human-approved private voice/caption finishing case with unchanged Motion v1.3.
+4. Review pinned dependency lockfile and licensing, then obtain explicit owner decision. **NO MERGE / NO PUBLISH until gates are independently satisfied.**
 
 ## Open gates
 

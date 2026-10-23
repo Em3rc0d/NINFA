@@ -1,4 +1,4 @@
-"""No-inference regression tests for the opt-in Kokoro voice audition."""
+"""No-inference regression tests for the owner-selected am_adam Kokoro voice."""
 import importlib.util
 import pathlib
 import tempfile
@@ -9,14 +9,15 @@ spec = importlib.util.spec_from_file_location("ninfa_voice_ab_kokoro", HERE / "v
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 
-class VoiceABTests(unittest.TestCase):
+class AdamNarrationTests(unittest.TestCase):
     def test_dry_run_needs_no_tts_installation(self):
         with tempfile.TemporaryDirectory() as tmp:
             candidate = pathlib.Path(tmp) / "sample"
             receipt = mod.preview(candidate, True)
             self.assertFalse(candidate.exists())
             self.assertEqual(receipt["status"], "PREFLIGHT_ONLY")
-            self.assertEqual(len(receipt["voices"]), 2)
+            self.assertEqual(receipt["voices"], ["am_adam"])
+            self.assertEqual(receipt["speed"], 0.96)
             self.assertFalse(receipt["requires_reference_voice"])
             self.assertEqual(receipt["publish_authority"], "NONE")
 
@@ -32,7 +33,8 @@ class VoiceABTests(unittest.TestCase):
     def test_voice_contract_does_not_misclaim_evidence(self):
         self.assertIn("synthetic", mod.AUDITION_SCRIPT)
         self.assertIn("Concurrency was not tested", mod.AUDITION_SCRIPT)
-        self.assertEqual(mod.VOICES, ("am_michael", "af_heart"))
+        self.assertEqual(mod.VOICES, ("am_adam",))
+        self.assertEqual(mod.SPEED, 0.96)
 
 if __name__ == "__main__":
     unittest.main()

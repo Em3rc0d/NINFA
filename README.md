@@ -32,6 +32,8 @@ A separate [Motion v1.3 local AV finisher](tools/motion-v13/README.md) can reuse
 
 [Motion v1.5 evidence-first production slice](tools/motion-v15/README.md) adds an independently reproducible SQLite duplicate-event case and a different local silent visual composition. It regenerates evidence before rendering, but still needs a new owner voice recording and manual review; it is not a publishing service.
 
+**S01 Motion V2 (review-only):** [native-1080p offline renderer, evidence and 19-check technical QA](tools/motion-s01-v2/README.md). This is an **18s visual review with original UI SFX, not approved narration or a published Short**; the [S01 motion decision receipt](docs/contracts/decisions/S01_MOTION_V2_LOCAL_RENDER_2026-10-30.md) keeps release fail-closed.
+
 ## North star
 
 Build an autonomous, profitable English-language technology media business where YouTube is the primary distribution channel and the content engine is the compounding asset.

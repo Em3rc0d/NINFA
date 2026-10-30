@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "NINFA-S01",
+  "experiment_type": "OFFLINE_LOCAL_SIMULATION",
+  "provider_calendar_api_tested": false,
+  "ai_agent_tested": false,
+  "tzdb_version": "system timezone database (not pinned)",
+  "runtime": "Python 3.13.5",
+  "limitations": [
+    "This tests Python zoneinfo conversion behavior, not Google Calendar, Outlook or an actual scheduling integration.",
+    "No user meeting was scheduled or changed.",
+    "Time-zone database rules can evolve; rerun if tzdb changes."
+  ],
+  "cases": [
+    {
+      "case_id": "fall_repeated_hour",
+      "timezone": "America/Los_Angeles",
+      "local_iso": "2026-11-01T01:30:00",
+      "status": "AMBIGUOUS",
+      "valid_utc_candidates": [
+        {
+          "fold": 0,
+          "utc": "2026-11-01T08:30:00Z",
+          "utc_offset_minutes": -420
+        },
+        {
+          "fold": 1,
+          "utc": "2026-11-01T09:30:00Z",
+          "utc_offset_minutes": -480
+        }
+      ],
+      "permissive_fold0_utc": "2026-11-01T08:30:00Z",
+      "guard_action": "REQUEST_CLARIFICATION"
+    },
+    {
+      "case_id": "spring_skipped_hour",
+      "timezone": "America/Los_Angeles",
+      "local_iso": "2026-03-08T02:30:00",
+      "status": "NONEXISTENT",
+      "valid_utc_candidates": [],
+      "permissive_fold0_utc": "2026-03-08T10:30:00Z",
+      "guard_action": "REQUEST_CLARIFICATION"
+    },
+    {
+      "case_id": "ordinary_hour",
+      "timezone": "America/Los_Angeles",
+      "local_iso": "2026-10-30T09:00:00",
+      "status": "UNAMBIGUOUS",
+      "valid_utc_candidates": [
+        {
+          "fold": 0,
+          "utc": "2026-10-30T16:00:00Z",
+          "utc_offset_minutes": -420
+        }
+      ],
+      "permissive_fold0_utc": "2026-10-30T16:00:00Z",
+      "guard_action": "ACCEPT"
+    },
+    {
+      "case_id": "after_fall_transition",
+      "timezone": "America/Los_Angeles",
+      "local_iso": "2026-11-01T03:00:00",
+      "status": "UNAMBIGUOUS",
+      "valid_utc_candidates": [
+        {
+          "fold": 0,
+          "utc": "2026-11-01T11:00:00Z",
+          "utc_offset_minutes": -480
+        }
+      ],
+      "permissive_fold0_utc": "2026-11-01T11:00:00Z",
+      "guard_action": "ACCEPT"
+    }
+  ]
+}

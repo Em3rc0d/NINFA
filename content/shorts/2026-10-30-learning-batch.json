@@ -25,9 +25,16 @@
       "pillar": "EXPERIMENT_STRESS",
       "experiment_plan": "Create deterministic calendar fixtures crossing UTC offset and daylight-saving transitions; compare stored UTC instants and intended local times.",
       "evidence_to_capture": "Input timezone IDs, ISO timestamps, created event IDs and exact assertion outcomes.",
-      "evidence_state": "NOT_RUN",
-      "evidence_refs": [],
-      "result_claims": [],
+      "evidence_state": "VERIFIED_LOCAL",
+      "evidence_refs": [
+        "experiments/timezone-ambiguity/evidence.json",
+        "experiments/timezone-ambiguity/run.py"
+      ],
+      "result_claims": [
+        "In local Python zoneinfo simulation, 2026-11-01T01:30:00 America/Los_Angeles corresponds to two distinct valid UTC instants (08:30Z and 09:30Z).",
+        "Local guard requests clarification for ambiguous and nonexistent wall-clock times.",
+        "No real calendar API or AI agent was tested."
+      ],
       "release_status": "BLOCKED_PENDING_EVIDENCE_AND_HUMAN_QA"
     },
     {

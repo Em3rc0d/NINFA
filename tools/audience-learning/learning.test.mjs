@@ -1,0 +1,18 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {readFileSync} from "node:fs";
+import {validateMetrics, analyzeMetrics, validateBatch} from "./learning.mjs";
+const metrics=JSON.parse(readFileSync("experiments/audience-learning/studio-2026-10-30.json","utf8"));
+const batch=JSON.parse(readFileSync("content/shorts/2026-10-30-learning-batch.json","utf8"));
+const copy=x=>JSON.parse(JSON.stringify(x));
+test("source snapshots validate",()=>assert.equal(validateMetrics(metrics).ok,true));
+test("six unrun briefs validate",()=>assert.equal(validateBatch(batch).ok,true));
+test("unknown feed exposure remains explicit",()=>assert.ok(analyzeMetrics(metrics).videos[0].alerts.includes("MISSING_SHOWN_IN_FEED")));
+test("initial hold warning is a hypothesis threshold",()=>assert.ok(analyzeMetrics(metrics).videos[0].alerts.includes("LOW_INITIAL_HOLD_EXPERIMENTAL_THRESHOLD")));
+test("conditional retention is derived separately",()=>assert.equal(analyzeMetrics(metrics).videos[0].estimated_conditional_duration_pct,92.3));
+test("bad percentage fails",()=>{const m=copy(metrics);m.videos[0].stayed_to_watch_pct=101;assert.equal(validateMetrics(m).ok,false)});
+test("engaged views cannot exceed views",()=>{const m=copy(metrics);m.videos[0].engaged_views=999;assert.equal(validateMetrics(m).ok,false)});
+test("same incident in batch fails",()=>{const b=copy(batch);b.candidates[1].incident_key=b.candidates[0].incident_key;assert.equal(validateBatch(b).ok,false)});
+test("history collision fails",()=>{const b=copy(batch);b.candidates[0].incident_key="sales.negative_selection";assert.equal(validateBatch(b).ok,false)});
+test("unrun evidence cannot claim results",()=>{const b=copy(batch);b.candidates[0].result_claims.push("Passed 10/10");assert.equal(validateBatch(b).ok,false)});
+test("cannot grant publication",()=>{const b=copy(batch);b.candidates[0].release_status="READY_TO_PUBLISH";assert.equal(validateBatch(b).ok,false)});

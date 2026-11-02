@@ -1,0 +1,90 @@
+{
+  "schema": "ninfa-local-crash-recovery-v1",
+  "experiment": "NINFA-S03",
+  "test_type": "LOCAL_SUBPROCESS_CRASH_RESTART",
+  "actual_worker_process_crashed": true,
+  "forced_exit_code": 27,
+  "interruption_after_completed_steps": 2,
+  "steps": [
+    "READ",
+    "VALIDATE",
+    "TRANSFORM",
+    "STORE"
+  ],
+  "modes": {
+    "naive": {
+      "first_process_exit_code": 27,
+      "second_process_exit_code": 0,
+      "actions": [
+        {
+          "step": "READ",
+          "phase": 1
+        },
+        {
+          "step": "VALIDATE",
+          "phase": 1
+        },
+        {
+          "step": "READ",
+          "phase": 2
+        },
+        {
+          "step": "VALIDATE",
+          "phase": 2
+        },
+        {
+          "step": "TRANSFORM",
+          "phase": 2
+        },
+        {
+          "step": "STORE",
+          "phase": 2
+        }
+      ],
+      "action_count": 6,
+      "unique_step_count": 4,
+      "repeated_action_count": 2,
+      "persisted_checkpoints": []
+    },
+    "checkpoint": {
+      "first_process_exit_code": 27,
+      "second_process_exit_code": 0,
+      "actions": [
+        {
+          "step": "READ",
+          "phase": 1
+        },
+        {
+          "step": "VALIDATE",
+          "phase": 1
+        },
+        {
+          "step": "TRANSFORM",
+          "phase": 2
+        },
+        {
+          "step": "STORE",
+          "phase": 2
+        }
+      ],
+      "action_count": 4,
+      "unique_step_count": 4,
+      "repeated_action_count": 0,
+      "persisted_checkpoints": [
+        "READ",
+        "VALIDATE",
+        "TRANSFORM",
+        "STORE"
+      ]
+    }
+  },
+  "boundary": {
+    "no_ai_model_tested": true,
+    "no_external_api_or_provider": true,
+    "no_network": true,
+    "no_real_customer_data": true,
+    "guarantee": "SQLite local writes and checkpoint in same transaction ONLY; does not prove external exactly-once effects, crashes between remote effects and ack, distributed queues or production reliability."
+  },
+  "publish_approved": false,
+  "sha256_canonical_core": "6b885aa90b71c7f48f7725d36fe27b12fa233407a6b04c5fdab30f976e1f202c"
+}

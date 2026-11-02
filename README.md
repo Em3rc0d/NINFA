@@ -34,6 +34,8 @@ A separate [Motion v1.3 local AV finisher](tools/motion-v13/README.md) can reuse
 
 **S01 Motion V2 (review-only):** [native-1080p offline renderer, evidence and 19-check technical QA](tools/motion-s01-v2/README.md). This is an **18s visual review with original UI SFX, not approved narration or a published Short**; the [S01 motion decision receipt](docs/contracts/decisions/S01_MOTION_V2_LOCAL_RENDER_2026-10-30.md) keeps release fail-closed.
 
+**Latest review-only Short:** [S03 — I Crashed My Automation at Step 2](content/shorts/2026-11-01-crash-recovery/STORYBOARD.md) is a source-backed local crash/restart demonstration with [replay evidence](experiments/crash-recovery/evidence.json) and [native 1080p motion source](tools/motion-s03/README.md). Technical QA passed; narration, mobile QA and publication remain BLOCKED.
+
 ## North star
 
 Build an autonomous, profitable English-language technology media business where YouTube is the primary distribution channel and the content engine is the compounding asset.

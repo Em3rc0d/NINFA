@@ -33,6 +33,8 @@ For a production candidate, use a new fixture tied to a verified source and huma
 
 - [2026-10-30 S01 Motion V2 review](decisions/S01_MOTION_V2_LOCAL_RENDER_2026-10-30.md) — native 1080×1920, 30 fps, 18s H.264/AAC (UI sound effects only), 19/19 technical QA; no voice/caption/mobile or publish certification. [Renderer](../../tools/motion-s01-v2/README.md) is additive and source-backed.
 
+- [2026-11-01 S03 local crash recovery motion review](decisions/S03_CRASH_RECOVERY_LOCAL_REVIEW_2026-11-01.md) — verified 6-vs-4 local SQLite recovery, 12 experiment tests, 27 technical/video QA; original 1080p preview with SFX, no voice, no publication authority.
+
 ## Transferencia de skills externas (no autoritativa)
 
 - [Adopción selectiva social-media-skills → NINFA (2026-10-12)](SOCIAL_SKILLS_MEDIA_ADAPTER_2026-10-12.md): handoff desde Content Seller, guiones originales, píxeles inspeccionados, límite de idioma/canal, protección de evidencia y autorización de publicación separada. No modifica la certificación de los Shorts existentes.

@@ -60,9 +60,16 @@
       "pillar": "EXPERIMENT_STRESS",
       "experiment_plan": "Run a local queued workflow; terminate the worker mid-job and resume with/without persisted checkpoints.",
       "evidence_to_capture": "Versioned worker logs, before/after job states, task outcomes and replay protocol.",
-      "evidence_state": "NOT_RUN",
-      "evidence_refs": [],
-      "result_claims": [],
+      "evidence_state": "VERIFIED_LOCAL",
+      "evidence_refs": [
+        "experiments/crash-recovery/replay.py",
+        "experiments/crash-recovery/evidence.json"
+      ],
+      "result_claims": [
+        "One local four-step Python/SQLite subprocess run interrupted after step two and restarted: naive mode recorded six actions including two repetitions.",
+        "Checkpoint mode saved each action plus completion marker in one local SQLite transaction; after the same interruption it recorded four actions and zero repetitions.",
+        "No AI model, remote provider, or external exactly-once guarantee was tested."
+      ],
       "release_status": "BLOCKED_PENDING_EVIDENCE_AND_HUMAN_QA"
     },
     {

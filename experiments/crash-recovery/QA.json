@@ -1,0 +1,130 @@
+{
+  "status": "TECHNICAL_PASS_REVIEW_ONLY",
+  "video_sha256": "eb450dbf3caaeab6ba04e178ca06f0f7db292dffe08e146bd0ad113138d28340",
+  "evidence_sha256": "e0a6748b1df8cb082745b7a9675fcf605c4caf321d6998a6312b183445a0a3a4",
+  "renderer_sha256": "1161bb06def9579a30d2971129d15953255b1f7d990110e19fbda8c2f34256d7",
+  "logo_sha256": "67ac55cba549a56ea01fb1a2e6c4abdd4d9ad84e4f4999dc2d1d7f68aa0fb730",
+  "checks_passed": 27,
+  "checks_total": 27,
+  "checks": [
+    {
+      "name": "Correct experiment ID",
+      "pass": true
+    },
+    {
+      "name": "Canonical evidence digest valid",
+      "pass": true
+    },
+    {
+      "name": "Real subprocess crash recorded in both modes",
+      "pass": true
+    },
+    {
+      "name": "Both worker restarts complete",
+      "pass": true
+    },
+    {
+      "name": "Baseline 6 actions 2 repeated",
+      "pass": true
+    },
+    {
+      "name": "Checkpoint 4 actions 0 repeated",
+      "pass": true
+    },
+    {
+      "name": "No AI model or provider claimed",
+      "pass": true
+    },
+    {
+      "name": "Publication remains blocked",
+      "pass": true
+    },
+    {
+      "name": "Render script preserves explicit local disclosure",
+      "pass": true
+    },
+    {
+      "name": "No banned public series label",
+      "pass": true
+    },
+    {
+      "name": "Logo source is owner-approved excerpt",
+      "pass": true
+    },
+    {
+      "name": "Video native 1080x1920",
+      "pass": true
+    },
+    {
+      "name": "H264 yuv420p",
+      "pass": true
+    },
+    {
+      "name": "30fps exactly",
+      "pass": true
+    },
+    {
+      "name": "540 frames",
+      "pass": true
+    },
+    {
+      "name": "18-second container",
+      "pass": true
+    },
+    {
+      "name": "AAC 48kHz two-channel SFX",
+      "pass": true
+    },
+    {
+      "name": "Nontrivial file size",
+      "pass": true
+    },
+    {
+      "name": "Video decodes",
+      "pass": true
+    },
+    {
+      "name": "All 10 sampled frames decode",
+      "pass": true
+    },
+    {
+      "name": "Distinct scenes visible",
+      "pass": true
+    },
+    {
+      "name": "Native decoded frames retain variation",
+      "pass": true
+    },
+    {
+      "name": "Official mark appears as nonempty image patch",
+      "pass": true
+    },
+    {
+      "name": "No mostly-white flash frames",
+      "pass": true
+    },
+    {
+      "name": "Full video decodes without FFmpeg error",
+      "pass": true
+    },
+    {
+      "name": "Audible procedural SFX present",
+      "pass": true
+    },
+    {
+      "name": "No measured digital PCM clipping",
+      "pass": true
+    }
+  ],
+  "audio_peak": 0.09351717680692673,
+  "required_human_gates": [
+    "English natural voice",
+    "Caption timing from actual audio",
+    "Mobile YouTube Shorts visual guides",
+    "Rights/brand review",
+    "Explicit owner release approval"
+  ],
+  "provider_upload": false,
+  "release_approved": false,
+  "ai_model_tested": false
+}
